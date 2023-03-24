@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#仮想環境は除外
+/ll_env/
+
+#mediaディレクトリに.gitkeepというファイルを作成し、それ以外は除外
+/media/*
+!/media/.gitkeep
+
+#staticディレクトリに.gitkeepというファイルを作成し、それ以外は除外
+/static/*
+!/static/.gitkeep
+
