@@ -1,0 +1,116 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post-spot</title>
+    <!-- FontAwesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/solid.min.css">
+    <!-- GoogleFonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Russo One-->
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&amp;display=swap" rel="stylesheet">
+    <!-- Noto Sans JP-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet">
+    <!-- cssファイル-->
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+  </head>
+  <body class="page-wrapper">
+    <header class="main-header">
+      <div class="container">
+        <button class="gnavTrigger" type="button" aria-label="メニューを開閉する" aria-expanded="false" aria-controls="gNav"><i class="fa-solid fa-bars"></i></button>
+        <h1 class="heading main-heading -brand">Camp</h1>
+        <button class="searchOpener" type="button" aria-label="検索フォームを開く" aria-hidden="false"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <form class="searchForm search-form" action="" method="" aria-hidden="true">
+          <label class="label"><i class="icon fa-solid fa-magnifying-glass" aria-hidden="false"></i>
+            <input class="input main-input -noborder" type="search" name="">
+          </label>
+        </form>
+        <button class="searchCloser" type="button" aria-label="検索フォームを閉じる" aria-hidden="true"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <nav class="gNav" id="gNav" aria-hidden="true">
+        <ul class="prefixed-linkList -primary -accent">
+          <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-user"></i>
+              <p class="title">見出し1</p></a></li>
+          <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-gear"></i>
+              <p class="title">見出し2</p></a></li>
+          <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-map"></i>
+              <p class="title">見出し3</p></a></li>
+        </ul>
+      </nav>
+      <ul class="searchResult prefixed-linkList -primary -accent" aria-hidden="true">
+        <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-tent"></i>
+            <p class="title">見出し1</p></a></li>
+        <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-person-hiking"></i>
+            <p class="title">見出し2</p></a></li>
+        <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-anchor"></i>
+            <p class="title">見出し3</p></a></li>
+      </ul>
+    </header>
+    <main class="post main-post">
+      <div class="container">
+        <div class="top">
+          <h2 class="main main-heading -lv1">New Spot</h2>
+          <p>スポットを追加しよう</p>
+          <p class="caution">*必須</p>
+        </div>
+        <form class="form" active="" method="">
+          <div class="item">
+            <fieldset class="selectedInputs selectedInputs-fieldset">
+              <legend class="legend">種類（1つだけ選択）<span class="necessary">*</span></legend>
+              <label class="label">
+                <input class="input" type="radio" name="spot-type" value="キャンプ場" required="true" checked>
+                <p class="title">キャンプ場</p>
+              </label>
+              <label class="label">
+                <input class="input" type="radio" name="spot-type" value="温泉">
+                <p class="title">温泉</p>
+              </label>
+              <label class="label">
+                <input class="input" type="radio" name="spot-type" value="コンビニ">
+                <p class="title">コンビニ</p>
+              </label>
+            </fieldset>
+          </div>
+          <label class="item titledInput-label">
+            <p class="title">スポット名<span class="necessary">*</span></p>
+            <input class="input secondary-input" type="text" name="spot-name" placeholder="" required="true">
+          </label>
+          <label class="item titledInput-label">
+            <p class="title">住所<span class="necessary">*</span></p>
+            <input class="input secondary-input" type="text" name="address" placeholder="" required="true">
+          </label>
+          <label class="item titledInput-label">
+            <p class="title">TEL</p>
+            <input class="input secondary-input" type="tel" name="tel" placeholder="">
+          </label>
+          <label class="item titledInput-label" aria-hidden="false">
+            <p class="title">営業時間<span class="necessary">*</span></p>
+            <textarea class="input main-input" name="period" rows="3" maxlength="300" placeholder="" required="true"></textarea>
+          </label>
+          <label class="item titledInput-label" aria-hidden="false">
+            <p class="title">値段<span class="necessary">*</span></p>
+            <textarea class="input main-input" name="price" rows="3" maxlength="300" placeholder="" required="true"></textarea>
+          </label>
+          <label class="item titledInput-label" aria-hidden="false">
+            <p class="title">説明<span class="necessary">*</span></p>
+            <textarea class="input main-input" name="describe" rows="3" maxlength="300" placeholder="" required="true"></textarea>
+          </label>
+          <button class="submit action-button" type="submit" disabled>送信</button>
+        </form>
+      </div>
+    </main>
+    <div class="content-mask" aria-hidden="true"></div>
+    <script src="{% static 'js/DisplaySwitcher.js'%}"></script>
+    <script src="{% static 'js/DisplayTriggerSwitcher.js'%}"></script>
+    <script src="{% static 'js/DisplaySwitcherBySingleTrigger.js'%}"></script>
+    <script src="{% static 'js/main-header.js'%}"></script>
+    <script src="{% static 'js/InputLabelDisplaySwitcher.js'%}"></script>
+    <script src="{% static 'js/ActivatedSubmit.js'%}"></script>
+    <script src="{% static 'js/main-post.js'%}"></script>
+  </body>
+</html>

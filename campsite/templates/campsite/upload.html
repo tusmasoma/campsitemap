@@ -1,0 +1,163 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FontAwesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/solid.min.css">
+    <!-- GoogleFonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Document</title>
+    <style>
+        .dropbox-json {
+            width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        .jsonform-title-json {
+            display: block;
+            margin: 10px auto;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        #drop-zone-json {
+            height: 180px;
+            margin: auto;
+            background-color: #F5F6F6;
+            line-height: 200px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: gray;
+        }
+
+        .dropbox-json input[type="file"] {
+            display: block;
+        }
+
+        .submitbutton-json {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button-json{
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 18px;
+            background-color: gray;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button-json:active {
+            transform: scale(0.96);
+        }
+
+        .iconbox-json {
+            display: none;
+            height: 25px;
+            margin: 10px;
+        }
+
+        .icon-json {
+            width: 25px;
+            height: 100%;
+        }
+
+        .jsonfile-icon-json {
+            background: url('/static/img/filetype-json.svg') no-repeat center center / auto 100%;
+        }
+
+        .jsonfile-name-json {
+            margin-left: 10px;
+            padding-top: 2px;
+        }
+
+        .trashbox-json {
+            border: none;
+            border-radius: 0;
+            background-color: transparent;
+            cursor: pointer;
+            margin: 0 0 0 auto;
+        }
+
+        .trashbox-icon-json {
+            background: url('/static/img/trash3.svg') no-repeat center center / auto 100%;
+        }
+        
+        .input-eria {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dropbox-json">
+        <form action="{% url 'campsite:upload'%}" method="POST" enctype="multipart/form-data">{% csrf_token %} 
+            <h1 class="jsonform-title-json">JsonFile</h1>
+            <div id="drop-zone-json"><i class="fa-solid fa-file-arrow-up"></i></div>
+            <div class="iconbox-json">
+                <div class="jsonfile-icon-json icon-json"></div>
+                <div class="jsonfile-name-json"></div>
+                <button type="button" class="trashbox-json">
+                    <div class="trashbox-icon-json icon-json"></div>
+                </button>
+            </div>
+            <div class="input-eria">
+                <p>spotjson:</p>
+                <input type="file" name="spot">
+            </div>
+            <div class="input-eria">
+                <p>commentjson:</p>
+                <input type="file" name="comment">
+            </div>
+            <div class="input-eria">
+                <p>imagejson:</p>
+                <input type="file" name="spotimage">
+            </div>
+            <input type="submit" class="submitbutton-json" value="Send">
+        </form>
+        <p>{{error}}</p>
+    </div>
+    <script>
+        (() => {
+            const fileInput = document.querySelectorAll('input[type=file]');
+            const submitButton = document.querySelector('.button-json');
+
+            /*
+            fileInput.addEventListener('change',() =>{
+                if(fileInput.files.length === 0){
+                    submitButton.type = 'button';
+                    submitButton.classList.toggle('submitbutton-json');
+                    submitButton.classList.toggle('button-json');
+            }else{
+                submitButton.type = 'submit';
+                if(submitButton.classList.contains('button-json')){
+                    submitButton.classList.toggle('submitbutton-json');
+                    submitButton.classList.toggle('button-json');
+                }
+            }
+            })
+            */
+
+        })();
+    </script>
+</body>
+
+</html>

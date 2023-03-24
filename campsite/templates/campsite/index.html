@@ -1,0 +1,94 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <!-- FontAwesome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/solid.min.css">
+  <!-- GoogleFonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Russo One-->
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&amp;display=swap" rel="stylesheet">
+  <!-- Noto Sans JP-->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet">
+  <!-- cssファイル-->
+  <link rel="stylesheet" href="{% static 'css/style.css'%}">
+  <style>
+    span {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="page-wrapper">
+  <header class="main-header">
+    <div class="container">
+      <button class="gnavTrigger" type="button" aria-label="メニューを開閉する" aria-expanded="false" aria-controls="gNav"><i
+          class="fa-solid fa-bars"></i></button>
+      <h1 class="heading main-heading -brand"><a href="{%url 'campsite:index'%}">Camp</a></h1>
+      <button class="searchOpener" type="button" aria-label="検索フォームを開く" aria-hidden="false"><i
+          class="fa-solid fa-magnifying-glass"></i></button>
+      <form class="searchForm search-form" action="" method="" aria-hidden="true">
+        <label class="label"><i class="icon fa-solid fa-magnifying-glass" aria-hidden="false"></i>
+          <input class="input main-input -noborder" type="search" name="">
+        </label>
+      </form>
+      <button class="searchCloser" type="button" aria-label="検索フォームを閉じる" aria-hidden="true"><i
+          class="fa-solid fa-xmark"></i></button>
+    </div>
+    <nav class="gNav" id="gNav" aria-hidden="true">
+      <ul class="prefixed-linkList -primary -accent">
+        <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-user"></i>
+            <p class="title">Account</p>
+          </a></li>
+        <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-gear"></i>
+            <p class="title">Settings</p>
+          </a></li>
+        <li class="item"><a class="link" href="{%url 'campsite:index'%}"><i class="icon -center fa-solid fa-map"></i>
+            <p class="title">map</p>
+          </a></li>
+        <li class="item" id="allspot"><span class="link"><i class="icon -center fas fa-map-marker-alt"></i>
+            <p class="title">all spot</p>
+          </span></li>
+        <li class="item" id="campsiteSqueeze"><span class="link"><i class="icon -center fa-solid fa-tent"></i>
+            <p class="title">campsite</p>
+          </span></li>
+        <li class="item" id="spaSqueeze"><span class="link"><i class="icon -center fa-solid fa-shower"></i>
+            <p class="title">spa</p>
+        </span></li>
+        <li class="item" id="cStoreSqueeze"><span class="link"><i class="icon -center fa-sharp fa-solid fa-store"></i>
+            <p class="title">c-store</p>
+        </span></li>
+      </ul>
+    </nav>
+    <ul class="searchResult prefixed-linkList -primary -accent" aria-hidden="true">
+      <!--
+      <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-tent"></i>
+          <p class="title">見出し1</p>
+        </a></li>
+      <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-person-hiking"></i>
+          <p class="title">見出し2</p>
+        </a></li>
+      <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-anchor"></i>
+          <p class="title">見出し3</p>
+        </a></li>-->
+    </ul>
+  </header>
+  <div id="map" style="height: 800px; width: 100%;"></div>
+  <div class="content-mask" aria-hidden="true"></div>
+  <script src="{% static 'js/DisplaySwitcher.js'%}"></script>
+  <script src="{% static 'js/DisplayTriggerSwitcher.js'%}"></script>
+  <script src="{% static 'js/DisplaySwitcherBySingleTrigger.js'%}"></script>
+  <script src="{% static 'js/main-header.js'%}"></script>
+  <script src="{% static 'js/googlemap.js'%}"></script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap"></script>
+</body>
+
+</html>
