@@ -135,7 +135,3 @@ dmypy.json
 /media/*
 !/media/.gitkeep
 
-#staticディレクトリに.gitkeepというファイルを作成し、それ以外は除外
-/static/*
-!/static/.gitkeep
-
