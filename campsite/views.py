@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from .models import Spot,Comment,SpotImageUrl
+from .decoraters import superuser_restriction
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.conf import settings
@@ -13,6 +14,7 @@ env = environ.Env()
 env.read_env(os.path.join(settings.BASE_DIR, '.env'))
 
 
+@superuser_restriction
 def jsonupload_view(request):
     if request.method == "POST" and request.FILES:
         user_instance = User.objects.get(username='googlemapuser')
