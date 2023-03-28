@@ -72,3 +72,6 @@ def add_comment_view(request):
     Comment.objects.create(spot=spot,user=user_instance,starRate=int(request.POST['rate']),text=request.POST['text'])
     return redirect('campsite:spot-detail',spot.id)
 
+def about_us_view(request):
+    return render(request,'campsite/aboutus.html')
+

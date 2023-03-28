@@ -178,6 +178,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: 43.5882, lng: 142.467 },
       zoom: 6,
+      gestureHandling: "greedy",
       //mapTypeControl: false, // マップタイプコントロールを非表示にする
       styles: [
         {

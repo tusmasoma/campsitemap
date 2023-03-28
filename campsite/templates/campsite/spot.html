@@ -23,7 +23,7 @@
     <header class="main-header">
       <div class="container">
         <button class="gnavTrigger" type="button" aria-label="メニューを開閉する" aria-expanded="false" aria-controls="gNav"><i class="fa-solid fa-bars"></i></button>
-        <h1 class="heading main-heading -brand"><a href="{%url 'campsite:index'%}">Camp</a></h1>
+        <h1 class="heading main-heading -brand"><a href="{%url 'campsite:index'%}">CampFinder</a></h1>
         <button class="searchOpener" type="button" aria-label="検索フォームを開く" aria-hidden="false"><i class="fa-solid fa-magnifying-glass"></i></button>
         <form class="searchForm search-form" action="" method="" aria-hidden="true">
           <label class="label"><i class="icon fa-solid fa-magnifying-glass" aria-hidden="false"></i>
@@ -66,7 +66,7 @@
             {%endfor%}
             {%endif%}
             {%if not imageurlObj_list%}
-            <li class="item"><img class="img" src="https://thumb.ac-illust.com/39/3920178d66157451930de97cc5431a64_t.jpeg" alt="投稿された画像" decoding="async" style="width: 500px; height: 275px;"></li>
+            <li class="item" style="text-align:center;"><img class="img" src="https://thumb.ac-illust.com/39/3920178d66157451930de97cc5431a64_t.jpeg" alt="投稿された画像" decoding="async" style="width: auto; height: 275px;"></li>
             {%endif%}
           </ul>
           <ul class="dots"></ul>

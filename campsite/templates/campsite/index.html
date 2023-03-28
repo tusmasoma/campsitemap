@@ -31,7 +31,7 @@
     <div class="container">
       <button class="gnavTrigger" type="button" aria-label="メニューを開閉する" aria-expanded="false" aria-controls="gNav"><i
           class="fa-solid fa-bars"></i></button>
-      <h1 class="heading main-heading -brand"><a href="{%url 'campsite:index'%}">Camp</a></h1>
+      <h1 class="heading main-heading -brand"><a href="{%url 'campsite:index'%}">CampFinder</a></h1>
       <button class="searchOpener" type="button" aria-label="検索フォームを開く" aria-hidden="false"><i
           class="fa-solid fa-magnifying-glass"></i></button>
       <form class="searchForm search-form" action="" method="" aria-hidden="true">
@@ -47,8 +47,8 @@
         <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-user"></i>
             <p class="title">Account</p>
           </a></li>
-        <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-gear"></i>
-            <p class="title">Settings</p>
+	  <li class="item"><a class="link" href="{%url 'campsite:about-us'%}"><i class="icon -center fa-solid fa-gear"></i>
+            <p class="title">About us</p>
           </a></li>
         <li class="item"><a class="link" href="{%url 'campsite:index'%}"><i class="icon -center fa-solid fa-map"></i>
             <p class="title">map</p>
