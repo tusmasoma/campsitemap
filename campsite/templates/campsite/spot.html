@@ -134,7 +134,7 @@
                   <p class="name">{{commentObj.user.username}}</p>
                 </div>
                 <div class="right">
-                  <time class="time" date-time="{{commentObj.created}}">{{commentObj.created}}</time>
+                  <time class="time" date-time="{{commentObj.created}}">{{commentObj.created | date:"Y-m-j"}}</time>
                   <button class="trigger" type="button" aria-label="コメント操作リストを開閉する" aria-expanded="false" aria-controls="board"><i class="fa-solid fa-ellipsis"></i></button>
                   <ul class="board" id="board" aria-hidden="true">
                     <li class="item"> <a class="link" href="">このコメントを報告</a></li>
