@@ -203,10 +203,6 @@ function initMap() {
         }
       ]
     });
-    google.maps.event.addListener(map, 'zoom_changed',function(){
-        console.log(map.getZoom())
-    })
-    
     let controlMap = new ControlMap(map)
     controlMap.asynchronousprocessing()
 
