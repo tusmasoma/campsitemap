@@ -84,6 +84,17 @@ class ControlMap {
                 }
             });
 
+            let updatemarker =  _.debounce(() => {
+                const bounds = map.getBounds();
+                if(bounds.contains(marker.getPosition()) && map.getZoom() >= 6){
+                    marker.setVisible(true)
+                }else{
+                    marker.setVisible(false);
+                }
+            }, 1000)
+            google.maps.event.addListener(map, 'dragend',updatemarker)
+            google.maps.event.addListener(map, 'zoom_changed',updatemarker)
+
             this.bindInfoWindow(marker,infowindow)
 
             this.markerList.push(marker)
@@ -119,28 +130,30 @@ class ControlMap {
                     scaledSize: new google.maps.Size(32,45.76) // 新しいサイズを指定
                 }
             });
-            // 地図をズームして特定のレベル（ここでは10）までズームされた場合にマーカーを表示する
-            google.maps.event.addListener(map, 'zoom_changed', function() {
-                if(jsonObj[i].category === 'campsite'){
-                    if(map.getZoom() >= 8){
-                        marker.setVisible(true);
-                    }else{
-                        marker.setVisible(false);
+            // 地図をズームして特定のレベルまでズームされた場合にマーカーを表示
+            let updatemarker =  _.debounce(() => {
+                const bounds = map.getBounds();
+                if(bounds.contains(marker.getPosition())){
+                    if(jsonObj[i].category === 'campsite'){
+                        if(map.getZoom() >= i%4+7 || map.getZoom() >=9){
+                            marker.setVisible(true);
+                        }else{
+                            marker.setVisible(false);
+                        }
+                    }else if (jsonObj[i].category === 'spa'){
+                        if (map.getZoom() >= i%10+7 || map.getZoom() >= 10) {
+                            marker.setVisible(true);
+                        } else {
+                            marker.setVisible(false);
+                        }
                     }
-                }else if (jsonObj[i].category === 'spa'){
-                    if (map.getZoom() >= i%7+8) {
-                        marker.setVisible(true);
-                    } else {
-                        marker.setVisible(false);
-                    }
-                }else if (jsonObj[i].category === 'conveniencestore'){
-                    if (map.getZoom() >= 16) {
-                        marker.setVisible(true)
-                    } else {
-                        marker.setVisible(false)
-                    }
+                }else{
+                    marker.setVisible(false);
                 }
-            });
+            }, 1000)
+
+            google.maps.event.addListener(map, 'dragend',updatemarker)
+            google.maps.event.addListener(map, 'zoom_changed',updatemarker)
 
             this.bindInfoWindow(marker,infowindow)
 
@@ -174,10 +187,13 @@ function initMap() {
     const campsiteSqueeze = document.querySelector('#campsiteSqueeze');
     const spaSqueeze = document.querySelector('#spaSqueeze');
     const cStoreSqueeze = document.querySelector('#cStoreSqueeze');
+
     //google.maps.Mapオブジェクトを初期化し、特定のhtml要素内にGoogleMapを表示します
     map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: 43.5882, lng: 142.467 },
       zoom: 6,
+      maxZoom: 18,
+      minZoom: 4,
       gestureHandling: "greedy",
       //mapTypeControl: false, // マップタイプコントロールを非表示にする
       styles: [
@@ -187,6 +203,9 @@ function initMap() {
         }
       ]
     });
+    google.maps.event.addListener(map, 'zoom_changed',function(){
+        console.log(map.getZoom())
+    })
     
     let controlMap = new ControlMap(map)
     controlMap.asynchronousprocessing()
