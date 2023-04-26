@@ -42,7 +42,7 @@
     <header class="main-header">
       <div class="container">
         <button class="gnavTrigger" type="button" aria-label="メニューを開閉する" aria-expanded="false" aria-controls="gNav"><i class="fa-solid fa-bars"></i></button>
-        <h1 class="heading main-heading -brand"><a href="#" onclick="window.history.back()">CampFinder</a></h1>
+        <h1 class="heading main-heading -brand"><a href="#" onclick="window.history.back(-1); event.preventDefault();">CampFinder</a></h1>
         <button class="searchOpener" type="button" aria-label="検索フォームを開く" aria-hidden="false"><i class="fa-solid fa-magnifying-glass"></i></button>
         <form class="searchForm search-form" action="" method="" aria-hidden="true">
           <label class="label"><i class="icon fa-solid fa-magnifying-glass" aria-hidden="false"></i>
@@ -57,7 +57,7 @@
               <p class="title">Account</p></a></li>
           <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-gear"></i>
               <p class="title">Settings</p></a></li>
-          <li class="item"><a class="link" href="#" onclick="window.history.back()"><i class="icon -center fa-solid fa-map"></i>
+          <li class="item"><a class="link" href="#" onclick="window.history.back(-1); event.preventDefault();"><i class="icon -center fa-solid fa-map"></i>
               <p class="title">map</p></a></li>
           {%if is_superuser%}
           <li class="item"><a class="link" href="{%url 'campsite:spot-delete' obj.id %}"><i class="icon -center fas fa-trash-alt"></i>
