@@ -208,6 +208,7 @@ function initMap() {
             localStorage.removeItem(`${controlMap.category[i]}Result`);
         }
     }
+    /** 
     // ローカルストレージから地図の状態を復元する
     let savedMapState = localStorage.getItem("mapState");
     if (savedMapState) {
@@ -254,7 +255,7 @@ function initMap() {
 
     window.addEventListener("beforeunload", function() {
         controlMap.saveMapState()
-    });
+    });*/
 
     google.maps.event.addListener(map, 'zoom_changed',()=>{
         if(map.getZoom() <= 6){
