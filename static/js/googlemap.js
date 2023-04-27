@@ -167,6 +167,7 @@ class ControlMap {
 
             this.markerList.push(marker)
         }
+        map.setZoom(map.getZoom()) //setMarkerメソッドのデフォルトのmarkerはvisible:flaseより、zoom変化させてvisible:trueにする
     }
 
     bindInfoWindow(marker,infoWindow){
@@ -235,10 +236,10 @@ function initMap() {
     let controlMap = new ControlMap(map);
     controlMap.control()
 
-    /** 
     // ローカルストレージから地図の状態を復元する
     let savedMapState = localStorage.getItem("mapState");
-    if (savedMapState) {
+    let savedNotHistoryBack = localStorage.getItem("notHistoryBack");
+    if (savedMapState && savedNotHistoryBack === "true") {
         savedMapState = JSON.parse(savedMapState);
          // Markerの復元
         const markerData = JSON.parse(savedMapState.marker);  //JSON形式のデータをobjectに変換
@@ -278,12 +279,15 @@ function initMap() {
                 localStorage.removeItem("mapState");
             });
         }
+        localStorage.removeItem("notHistoryBack") //localstrageに残っていると、初期化されるたびにmapstateが行われるのを防ぐ
     }
 
     window.addEventListener("beforeunload", function() {
-        controlMap.saveMapState()
+        if (!(history.pushState && history.state !== undefined)) {
+            controlMap.saveMapState()
+        }
     });
-    */
+    
 
     google.maps.event.addListener(map, 'zoom_changed',()=>{
         if(map.getZoom() <= 6){
@@ -297,7 +301,6 @@ function initMap() {
     allSpot.addEventListener('click',function(){
         controlMap.removeMarkers()
         controlMap.control()
-        map.setZoom(map.getZoom())
     })
 
     for(let i = 0; i < controlMap.category.length; i++){
@@ -311,7 +314,6 @@ function initMap() {
             let savedResult = localStorage.getItem(`${controlMap.category[i]}Result`);
             savedResult = JSON.parse(savedResult);
             controlMap.setMarker(savedResult); 
-            map.setZoom(map.getZoom()) //setMarkerメソッドのデフォルトのmarkerはvisible:flaseより、zoom変化させてvisible:trueにする
         })
     }
 }
