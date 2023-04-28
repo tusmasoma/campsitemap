@@ -137,18 +137,20 @@ class ControlMap {
                     scaledSize: new google.maps.Size(32,45.76) // 新しいサイズを指定
                 },
                 zIndex: zIndex(jsonObj[i].category),
+                name: jsonObj[i].name, // マーカーの場所名を設定する
+                category: jsonObj[i].category, //マーカーのcategory(campsite,spa,conviniencestore)を設定する
             });
             // 地図をズームして特定のレベルまでズームされた場合にマーカーを表示
             let updatemarker =  _.debounce(() => {
                 const bounds = map.getBounds();
                 if(bounds.contains(marker.getPosition())){
-                    if(jsonObj[i].category === 'campsite'){
+                    if(marker.category === 'campsite'){
                         if(map.getZoom() >= i%4+7 || map.getZoom() >=9){
                             marker.setVisible(true);
                         }else{
                             marker.setVisible(false);
                         }
-                    }else if (jsonObj[i].category === 'spa'){
+                    }else if (marker.category === 'spa'){
                         if (map.getZoom() >= i%10+7 || map.getZoom() >= 10) {
                             marker.setVisible(true);
                         } else {
@@ -316,4 +318,7 @@ function initMap() {
             controlMap.setMarker(savedResult); 
         })
     }
+
+    const searchInstace = new SearchMarker(controlMap)
+    searchInstace.searchSpot()
 }
