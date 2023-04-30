@@ -2,8 +2,16 @@
 class SearchMarker{
     constructor(controlMap){
         this.input = document.querySelector('input[type="search"]');
-        this.resultList = document.querySelector('.searchResult');
         this.controlMap = controlMap
+        this.searchOpenerEl = document.querySelector('.main-header > .container > .searchOpener');
+        this.searchFormEl = document.querySelector('.main-header > .container > .searchForm');
+        this.searchFormLabelEl = document.querySelector('.main-header > .container > .searchForm > .label > .icon');
+        this.searchCloserEl= document.querySelector('.main-header > .container > .searchCloser');
+        this.searchResultEl = document.querySelector('.main-header > .searchResult');
+        this.maskEl = document.querySelector('.page-wrapper > .content-mask');
+        this.gnavTriggerEl = document.querySelector('.main-header > .container > .gnavTrigger');
+        this.gNavEl = document.querySelector('.main-header > .gNav');
+
     }
     /**
      * 検索窓に入力された情報からspotを検索
@@ -24,7 +32,7 @@ class SearchMarker{
             if (keyword !== '') {
                 const filteredMarkerList = self.controlMap.markerList.filter(marker => marker.name.includes(keyword)).slice(0, 10);
                 // 検索結果を resultList に挿入する
-                self.resultList.innerHTML = filteredMarkerList.map(marker => `
+                self.searchResultEl.innerHTML = filteredMarkerList.map(marker => `
                 <li class="item">
                 <a class="link" href="#"><i class="icon -center ${self.getIconClassByCategory(marker.category)}"></i>
                 <p class="title">${marker.name}</p>
@@ -34,11 +42,11 @@ class SearchMarker{
                 
                 //クリックした検索結果からmarkerを設置する
                 if(filteredMarkerList.length > 0){
-                    self.setResultMarker(filteredMarkerList);
+                    self.setResult(filteredMarkerList);
                 }
             }else {
                 // キーワードが空の場合は、結果をクリアする
-                self.resultList.innerHTML = '';
+                self.searchResultEl.innerHTML = '';
             }
         });
     }
@@ -62,11 +70,11 @@ class SearchMarker{
     /**
      * 検索結果から選択したspotのmarkerを設置する
      */
-    setResultMarker(filteredMarkerList){
+    setResult(filteredMarkerList){
         //クリックした検索結果からmarkerを設置する
         //クリックしたmarkerのみ表示され、他のmarkerは消す
         let self = this
-        self.resultList.querySelectorAll('a').forEach((aTag) => {
+        self.searchResultEl.querySelectorAll('a').forEach((aTag) => {
             aTag.addEventListener('click', function(event) {
                 event.preventDefault();
                 const markerTitle = event.target.closest('.item').querySelector('.title').textContent;
@@ -74,17 +82,77 @@ class SearchMarker{
                 const marker = filteredMarkerList.find(marker => marker.name === markerTitle);
                 // マーカーが存在する場合は、その位置に地図の中心を移動する
                 if (marker) {
-                    if (self.controlMap.currentInfoWindow) { // 既に開いている情報ウィンドウがある場合は閉じる
-                        self.controlMap.currentInfoWindow.close();
-                        self.controlMap.currentInfoWindow = null;
-                    } 
-                    self.controlMap.markerList.forEach(m => m.setVisible(false));
-                    marker.setVisible(true);
-                    self.controlMap.map.setCenter(marker.getPosition());
-                    self.resultList.innerHTML = ''; //検索結果を削除
+                    self.resetAll() //検索前にresetする
+                    self.setResultMarker(marker) //検索結果をmap上にセット
                     self.input.value = marker.name; //検索窓の中身を検索したspotnameに
                 }
             })
         })
     }
+
+    /**
+     * 検索前にreset
+     */
+    resetAll(){
+        const searchOpener = new DisplaySwitcher(this.searchOpenerEl);
+        const searchForm = new DisplaySwitcher(this.searchFormEl);
+        const searchCloser = new DisplaySwitcher(this.searchCloserEl);
+        const searchResult = new DisplaySwitcher(this.searchResultEl);
+        const mask = new DisplaySwitcher(this.maskEl);
+        searchOpener.open();
+        searchForm.close();
+        searchCloser.close();
+        searchResult.close();
+        mask.close();
+    }
+
+    /**
+     * setMarker
+     */
+    setResultMarker(marker){
+
+        if (this.controlMap.currentInfoWindow) { // 既に開いている情報ウィンドウがある場合は閉じる
+            this.controlMap.currentInfoWindow.close();
+            this.controlMap.currentInfoWindow = null;
+        } 
+        this.controlMap.markerList.forEach(m => m.setMap(null)); //mapに表示されているmarkerをすべて削除
+
+        this.zoomMapToLevel(marker)
+
+        google.maps.event.clearListeners(map, 'zoom_changed'); //setZoom実行時に、既存のイベントによりmarkerの表示がされないため、イベントを初期化する
+        google.maps.event.clearListeners(map, 'dragend');
+
+        marker.visible = true //markerのデフォルトがvisible:fasleのものがあるため
+        marker.setMap(this.controlMap.map);
+    }
+
+    zoomMapToLevel(marker) {
+        const map = this.controlMap.map;
+      
+        // 指定したmaekerが現在のzoomレベルに入っている場合
+        if (map.getBounds().contains(marker.getPosition())) {
+            // マップの中心をマーカーに合わせる
+            map.setCenter(marker.getPosition());
+            map.setZoom(10);
+            return;
+        }
+      
+        const interval = setInterval(() => {
+          // 現在のズームレベルを取得
+          const currentZoom = map.getZoom();
+      
+          // 指定したmarkerが範囲に入るまでズームレベルまでズームアウト
+          if (!map.getBounds().contains(marker.getPosition())) {
+            map.setZoom(currentZoom - 1);
+          } else {
+            clearInterval(interval);
+            // ズームが終了した後に中心点を移動する
+            const panOptions = {
+                duration: 500, // 移動時間（ミリ秒）
+                easing: "linear" // 移動アニメーションのタイプ
+            };
+            map.panTo(marker.getPosition(), panOptions);
+        }
+        }, 100);
+    }      
 }
