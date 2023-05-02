@@ -117,39 +117,43 @@ class SearchMarker{
         } 
         this.controlMap.markerList.forEach(m => m.setMap(null)); //mapに表示されているmarkerをすべて削除
 
+        marker.visible = true //markerのデフォルトがvisible:fasleのものがあるため
+        marker.setMap(this.controlMap.map);
+
+        this.controlMap.map.fitBounds(this.controlMap.map.getBounds());  // 可視領域を更新しないと、markerが可視領域に入っていてもmap.getBounds().contains(marker.getPosition())がfalseになる
+
         this.zoomMapToLevel(marker)
 
         google.maps.event.clearListeners(map, 'zoom_changed'); //setZoom実行時に、既存のイベントによりmarkerの表示がされないため、イベントを初期化する
         google.maps.event.clearListeners(map, 'dragend');
 
-        marker.visible = true //markerのデフォルトがvisible:fasleのものがあるため
-        marker.setMap(this.controlMap.map);
     }
 
     zoomMapToLevel(marker) {
         const map = this.controlMap.map;
-      
-        // 指定したmaekerが現在のzoomレベルに入っている場合
+        
+        // 指定したmarkerが現在のzoomレベルに入っている場合
         if (map.getBounds().contains(marker.getPosition())) {
             // マップの中心をマーカーに合わせる
-            map.setCenter(marker.getPosition());
             map.setZoom(10);
+            map.setCenter(marker.getPosition());
             return;
         }
-      
+
         const interval = setInterval(() => {
           // 現在のズームレベルを取得
-          const currentZoom = map.getZoom();
+          let currentZoom = map.getZoom();
       
           // 指定したmarkerが範囲に入るまでズームレベルまでズームアウト
           if (!map.getBounds().contains(marker.getPosition())) {
             map.setZoom(currentZoom - 1);
+            map.fitBounds(map.getBounds()); // 可視領域を更新
           } else {
             clearInterval(interval);
             // ズームが終了した後に中心点を移動する
             const panOptions = {
                 duration: 500, // 移動時間（ミリ秒）
-                easing: "linear" // 移動アニメーションのタイプ
+                easing: "linear", // 移動アニメーションのタイプ
             };
             map.panTo(marker.getPosition(), panOptions);
         }
