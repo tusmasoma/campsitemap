@@ -58,7 +58,8 @@ router.register(r'conveniencestore', ConvenienceStoreViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
-    path('accounts/', include('django.contrib.auth.urls')),
+    #path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('',include('campsite.urls'))

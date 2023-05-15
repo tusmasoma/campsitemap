@@ -1,0 +1,117 @@
+body {
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: #10A37F;
+}
+
+input:focus {
+    outline: none;
+}
+input:invalid {
+    border: 1px solid red;
+    border-radius: 2px;
+}
+input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px white inset;
+}
+
+/* 入力がある場合には背景色を変える */
+input:not(:placeholder-shown) {
+    background-color: #fff;
+}
+
+.login__container  {
+    width: 375px;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 5rem;
+    text-align: center;
+}
+
+.login__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -1rem;
+}
+.login__form > div {
+    display: flex;
+    flex-direction: row;
+    width: calc(300px - 1rem);
+    height: 2.5rem;
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border: 2px solid #CFD4DB;
+    border-radius: 2px;
+}
+.login__form > button {
+    display: block;
+    width: 300px;
+    height: 2.5rem;
+    margin-top: 1rem;
+    border: 1px solid #10A37F;
+    border-radius: 2px;
+    background-color: #10A37F;
+    color: #fff;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+.login__form p {
+    font-size: 0.8rem;
+    color: #374151;
+}
+.login__form input {
+    border: 1px solid #fff;
+    width: 90%;
+}
+.show-password {
+    width: 10%;
+    height: 100%;
+    border:  1px solid #fff;
+    background-color: #fff;
+    color: #CFD4DB;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #CFD4DB;
+    color: #CFD4DB;
+    overflow: visible;
+    text-align: center;
+    height: 5px;
+    width: 300px;
+}
+hr:after {
+    background: #fff;
+    content: 'OR';
+    padding: 0 4px;
+    position: relative;
+    top: -13px;
+}
+
+.google-login {
+    width: 300px;
+    height: 3rem;
+    border:1px solid #CFD4DB;
+    border-radius: 2px;
+    background-color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+.google-login:hover {
+    background-color: #e8e7e7;
+}
+
+.google-login img {
+    margin-left: 1rem;
+    margin-right: 32px;  /*画像とテキストの間隔を設定 */
+}

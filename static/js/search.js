@@ -111,6 +111,9 @@ class SearchMarker{
      */
     setResultMarker(marker){
 
+        google.maps.event.clearListeners(map, 'zoom_changed'); //setZoom実行時に、既存のイベントによりmarkerの表示がされないため、イベントを初期化する
+        google.maps.event.clearListeners(map, 'dragend');
+
         if (this.controlMap.currentInfoWindow) { // 既に開いている情報ウィンドウがある場合は閉じる
             this.controlMap.currentInfoWindow.close();
             this.controlMap.currentInfoWindow = null;
@@ -123,9 +126,6 @@ class SearchMarker{
         this.controlMap.map.fitBounds(this.controlMap.map.getBounds());  // 可視領域を更新しないと、markerが可視領域に入っていてもmap.getBounds().contains(marker.getPosition())がfalseになる
 
         this.zoomMapToLevel(marker)
-
-        google.maps.event.clearListeners(map, 'zoom_changed'); //setZoom実行時に、既存のイベントによりmarkerの表示がされないため、イベントを初期化する
-        google.maps.event.clearListeners(map, 'dragend');
 
     }
 

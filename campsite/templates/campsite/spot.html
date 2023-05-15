@@ -59,6 +59,13 @@
               <p class="title">Settings</p></a></li>
           <li class="item"><a class="link mapBack" href="#"><i class="icon -center fa-solid fa-map"></i>
               <p class="title">map</p></a></li>
+          {% if request.user.is_authenticated %}
+          <li class="item"><a class="link" href="{%url 'accounts:logout'%}"><i class="icon -center fas fa-sign-out"></i>
+              <p class="title">Logout</p></a></li>
+          {%else%}
+          <li class="item"><a class="link" href="{%url 'accounts:login'%}?next={{ request.path }}"><i class="icon -center fas fa-sign-in"></i>
+              <p class="title">Login</p></a></li>
+          {%endif%}
           {%if is_superuser%}
           <li class="item"><a class="link" href="{%url 'campsite:spot-delete' obj.id %}"><i class="icon -center fas fa-trash-alt"></i>
               <p class="title">DELETE</p></a></li>
@@ -81,11 +88,11 @@
           <ul class="slider">
             {%if imageurlObj_list%}
             {%for imageurlObj in imageurlObj_list%}
-            <li class="item"><img class="img" src="{{imageurlObj.url}}" alt="投稿された画像" decoding="async" style="width: 500px; height: 275px;"></li>
+            <li><img src="{{imageurlObj.url}}" alt="投稿された画像" width="500" height="375" decoding="async"></li>
             {%endfor%}
             {%endif%}
             {%if not imageurlObj_list%}
-            <li class="item" style="text-align:center;"><img class="img" src="https://thumb.ac-illust.com/39/3920178d66157451930de97cc5431a64_t.jpeg" alt="投稿された画像" decoding="async" style="width: auto; height: 275px;"></li>
+            <li><img src="https://thumb.ac-illust.com/39/3920178d66157451930de97cc5431a64_t.jpeg" alt="投稿された画像" width="500" height="375" decoding="async"></li>
             {%endif%}
           </ul>
           <ul class="dots"></ul>
@@ -125,7 +132,12 @@
           </ul>
         </section>
         <section class="comment comment-group" id="comment" role="tabPanel" aria-hidden="true">
+          {% if request.user.is_authenticated %}
           <button class="addTrigger action-button" type="button" aria-label="コメント投稿画面を開く" aria-expanded="false" aria-controls="add-comment">コメントする</button>
+          {%else%}
+          <p style="text-align: center;margin-bottom: 1rem;color: #d3d2d2;"><a href="{%url 'accounts:login'%}?next={{ request.path }}" style="color: #8eb181;">ログイン</a>するとコメントできます</p>
+          <button class="addTrigger action-button" type="button" aria-label="コメント投稿画面を開く" aria-expanded="false" aria-controls="add-comment" disabled>コメントする</button>
+          {%endif%}
           <ul class="comment-list"> 
             {%for commentObj in commentobj_list%}
             <li class="item">
@@ -139,8 +151,7 @@
                   <ul class="board" id="board" aria-hidden="true">
                     <li class="item"> <a class="link" href="">このコメントを報告</a></li>
                     {%if request.user == commentObj.user or is_superuser%}
-                    <li class="item"> <a class="link" href="">削除</a></li>
-                    <li class="item"> <a class="link" href="">編集</a></li>
+                    <li class="item"> <a class="link" href="{%url 'campsite:delete-comment' commentObj.id%}?next={{ request.path }}">削除</a></li>
                     {%endif%}
                   </ul>
                 </div>
@@ -154,16 +165,17 @@
           </ul>
         </section>
       </div>
+      <div class="addComment-mask" aria-hidden="true"></div>
       <section class="addComment add-comment" id="add-comment" aria-hidden="true">
+        <button class="close" type="button"><i class="fa-solid fa-xmark"> </i></button>
         <div class="container"> 
           <div class="head"> 
-            <button class="close" type="button"><i class="fa-solid fa-xmark"> </i></button>
             <p class="spotName">{{obj.name}}</p>
           </div>
           <form class="form" action="{%url 'campsite:add-comment'%}" method="POST">{% csrf_token %} 
             <div class="content">
               <div class="head"> <img class="icon" width="16" height="16" src="{% static 'img/sample-face-1.jpg'%}" alt="アイコン">
-                <p class="name">this site user</p>
+                <p class="name">{{request.user}}</p>
               </div>
               <div class="rating rating-select" data-rating="" aria-label="">
                 <button class="radio" type="button" data-rate="1"><i class="icon fa-solid fa-star"></i></button>
@@ -180,7 +192,6 @@
           </form>
         </div>
       </section>
-      <div class="addComment-mask" aria-hidden="true"></div>
     </main>
     <div class="content-mask" aria-hidden="true"></div>
     <script src="{% static 'js/DisplaySwitcher.js'%}"></script>
@@ -202,15 +213,27 @@
             event.preventDefault();
             // クリックされたときの処理
             if (history.pushState && history.state !== undefined) {
-              // ブラウザバックできる場合の処理
-              window.history.back(-1);
+              // 1つ前のページのURLを取得する
+              if(document.referrer.includes("/login/")){
+                notHistoryBack()
+              } else if (document.referrer.includes("/signup/")){
+                notHistoryBack()
+              } else{
+                // ブラウザバックできる場合の処理
+                localStorage.setItem("notHistoryBack","false");
+                window.history.back(-1);
+              }
             } else {
-              // ブラウザバックできない場合の処理
-              localStorage.setItem("notHistoryBack","true");
-              window.location.href = '/'
+              notHistoryBack()
             }
           });
         });
+
+        function notHistoryBack(){
+          // ブラウザバックできない場合の処理
+          localStorage.setItem("notHistoryBack","true");
+          window.location.href = '/'
+        }
     </script>
   </body>
 </html>

@@ -9,7 +9,7 @@ const openTriggerEl = document.querySelector('.comment-group > .addTrigger');
 const addCommentEl = document.querySelector('.add-comment');
 const addCommentMaskEl = document.querySelector('.addComment-mask');
 
-const closeTriggerEl = document.querySelector('.add-comment > .container > .head > .close');
+const closeTriggerEl = document.querySelector('.add-comment > .close');
 
 // 初期化時にイベント設定
 const switcher = new DisplaySwitcherByDoubleTrigger(openTriggerEl, closeTriggerEl, addCommentEl, addCommentMaskEl);

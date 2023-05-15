@@ -38,11 +38,6 @@
   <!--icon-->
   <link rel="icon" href="{% static 'img/favicon.PNG'%}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon.PNG'%}">
-  <style>
-    span {
-      cursor: pointer;
-    }
-  </style>
 </head>
 
 <body class="page-wrapper">
@@ -72,21 +67,27 @@
         <li class="item"><a class="link" href="{%url 'campsite:index'%}"><i class="icon -center fa-solid fa-map"></i>
             <p class="title">map</p>
           </a></li>
-        <li class="item" id="allspot"><span class="link"><i class="icon -center fas fa-map-marker-alt"></i>
+        <li class="item" id="allspot"><a class="link" href="#" onclick="return false;"><i class="icon -center fas fa-map-marker-alt"></i>
             <p class="title">all spot</p>
-          </span></li>
-        <li class="item" id="campsiteSqueeze"><span class="link"><i class="icon -center fa-solid fa-tent"></i>
+          </a></li>
+        <li class="item" id="campsiteSqueeze"><a class="link" href="#" onclick="return false;"><i class="icon -center fa-solid fa-tent"></i>
             <p class="title">campsite</p>
-          </span></li>
-        <li class="item" id="spaSqueeze"><span class="link"><i class="icon -center fa-solid fa-shower"></i>
+          </a></li>
+        <li class="item" id="spaSqueeze"><a class="link" href="#" onclick="return false;"><i class="icon -center fa-solid fa-shower"></i>
             <p class="title">spa</p>
-        </span></li>
-        <li class="item" id="conveniencestoreSqueeze"><span class="link"><i class="icon -center fa-sharp fa-solid fa-store"></i>
+          </a></li>
+        <li class="item" id="conveniencestoreSqueeze"><a class="link" href="#" onclick="return false;"><i class="icon -center fa-sharp fa-solid fa-store"></i>
             <p class="title">c-store</p>
-        </span></li>
-        <li class="item"><a class="link" href="{%url 'campsite:index'%}"><i class="icon -center fas fa-sign-in"></i>
+          </a></li>
+        {% if request.user.is_authenticated %}
+        <li class="item"><a class="link" href="{%url 'accounts:logout'%}"><i class="icon -center fas fa-sign-out"></i>
+          <p class="title">Logout</p>
+        </a></li>
+        {%else%}
+        <li class="item"><a class="link" href="{%url 'accounts:login'%}?next={{ request.path }}"><i class="icon -center fas fa-sign-in"></i>
           <p class="title">Login</p>
         </a></li>
+        {%endif%}
       </ul>
     </nav>
     <ul class="searchResult prefixed-linkList -primary -accent" aria-hidden="true">

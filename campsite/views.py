@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from .models import Spot,Comment,SpotImageUrl
-from .decoraters import superuser_restriction
+from .decoraters import superuser_restriction,is_authenticated_restriction
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.conf import settings
@@ -67,12 +67,16 @@ def delete_spot_view(request,pk):
     spot.delete()
     return redirect('campsite:index')
 
-
+@is_authenticated_restriction
 def add_comment_view(request):
-    user_instance = User.objects.get(username='siteuser')
     spot = Spot.objects.get(key=request.POST['spotkey'])
-    Comment.objects.create(spot=spot,user=user_instance,starRate=int(request.POST['rate']),text=request.POST['text'])
+    Comment.objects.create(spot=spot,user=request.user,starRate=int(request.POST['rate']),text=request.POST['text'])
     return redirect('campsite:spot-detail',spot.id)
+
+def delete_comment_view(request,pk):
+    comment = Comment.objects.get(id=pk)
+    comment.delete()
+    return redirect(request.GET.get('next','campsite:index'))
 
 def about_us_view(request):
     return render(request,'campsite/aboutus.html')
