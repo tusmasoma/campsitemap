@@ -4,7 +4,7 @@ function accountInit() {
 }
 
 function showPassword() {
-    const passwordInput = document.querySelector("input[type='password']");
+    const passwordInput = document.querySelector("input[name='password']");
     const passwordCheckbox = document.querySelector(".show-password");
     const icon = document.querySelector('.show-password > i');
     
@@ -23,7 +23,7 @@ function showPassword() {
 
 function checkEmail() {
     const emailError = document.getElementById('email-error');
-    const email = document.querySelector("input[type='email']").value;
+    const email = document.querySelector("input[name='email']").value;
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
 
     if (!emailRegex.test(email)) {
@@ -40,7 +40,7 @@ function checkEmail() {
 
 function checkPassword() {
     const passwordError = document.getElementById('password-error')
-    const passwordInput = document.querySelector("input[type='password']");
+    const passwordInput = document.querySelector("input[name='password']");
 
     if(passwordInput.value !== ""){
         passwordError.textContent = '';
