@@ -19,6 +19,8 @@ class ControlMap {
         this.category = ["campsite","spa","conveniencestore"]
     }
     control() {
+        //this.getCurrentLocation() //現在地表示
+
         //ローカルストレージに "results" が保存されている場合にはその値を使ってマーカーをセットし、そうでない場合には非同期処理を開始するようになっています。
         //これにより無駄な非同期処理を減らします。
         //一定時間以上経過している場合には再度非同期処理を行う
@@ -143,9 +145,9 @@ class ControlMap {
             // 地図をズームして特定のレベルまでズームされた場合にマーカーを表示
             let updatemarker =  _.debounce(() => {
                 const bounds = map.getBounds();
-                if(bounds.contains(marker.getPosition())){
+                if(marker.getMap() && bounds.contains(marker.getPosition())){
                     if(marker.category === 'campsite'){
-                        if(map.getZoom() >= i%4+7 || map.getZoom() >=9){
+                        if(map.getZoom() >= i%7+6 || map.getZoom() >=9){
                             marker.setVisible(true);
                         }else{
                             marker.setVisible(false);
@@ -214,12 +216,48 @@ class ControlMap {
         };
         localStorage.setItem("mapState", JSON.stringify(mapState,getCircularReplacer()));
     }
+    // 5. Geolocation APIを使用して現在地を取得する
+    getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                // 取得成功時のコールバック関数
+                (position) => {
+                    // 現在地を取得する
+                    const currentLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    // 6. 取得した現在地をマップ上に表示する
+                    map.setCenter(currentLocation);
+                    new google.maps.Marker({
+                        position: currentLocation,
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: "#3366CC",
+                            fillOpacity: 0.7,
+                            strokeWeight: 1,
+                            strokeColor: "#3366CC",
+                            strokeOpacity: 0.8
+                          },
+                    });
+                },
+                // 取得失敗時のコールバック関数
+                () => {
+                    alert('現在地の取得に失敗しました。');
+                }
+            );
+        } else {
+            alert('現在地を取得する機能がありません。');
+        }
+    }
 }
 
 
-function initMap() {
+function initMap2() {
     const allSpot = document.querySelector('#allspot');
-
+    /** 
     //google.maps.Mapオブジェクトを初期化し、特定のhtml要素内にGoogleMapを表示します
     map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: 43.5882, lng: 142.467 },
@@ -234,14 +272,16 @@ function initMap() {
           stylers: [{visibility: 'off'}]
         }
       ]
-    });
+    });*/
+
     let controlMap = new ControlMap(map);
-    controlMap.control()
+    controlMap.control();
 
     // ローカルストレージから地図の状態を復元する
     let savedMapState = localStorage.getItem("mapState");
     let savedNotHistoryBack = localStorage.getItem("notHistoryBack");
     if (savedMapState && savedNotHistoryBack === "true") {
+        console.log('hey')
         savedMapState = JSON.parse(savedMapState);
          // Markerの復元
         const markerData = JSON.parse(savedMapState.marker);  //JSON形式のデータをobjectに変換
@@ -285,9 +325,7 @@ function initMap() {
     }
 
     window.addEventListener("beforeunload", function() {
-        if (!(history.pushState && history.state !== undefined)) {
-            controlMap.saveMapState()
-        }
+        controlMap.saveMapState();
     });
     
 
@@ -321,4 +359,26 @@ function initMap() {
 
     const searchInstace = new SearchMarker(controlMap)
     searchInstace.searchSpot()
+}
+
+function initMap() {
+    /**googlemapを完全に読み込み終わってから、markerやらをsetする */
+
+    //google.maps.Mapオブジェクトを初期化し、特定のhtml要素内にGoogleMapを表示します
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 43.5882, lng: 142.467 },
+      zoom: 6,
+      maxZoom: 18,
+      minZoom: 4,
+      gestureHandling: "greedy",
+      //mapTypeControl: false, // マップタイプコントロールを非表示にする
+      styles: [
+        {
+          featureType: 'poi',
+          stylers: [{visibility: 'off'}]
+        }
+      ]
+    });
+
+    google.maps.event.addListenerOnce(map, 'idle', initMap2)
 }
