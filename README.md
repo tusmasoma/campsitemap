@@ -14,3 +14,7 @@ https://campfinderjp.com/
 
 ## サイトの使い方
 - デフォルトでいくつかのキャンプ場が表示されています
+<img src="S__91955202.jpg" width="320">
+
+- zoomレベルによって表示が変わります
+<img src="S__91955204.jpg" width="320">
