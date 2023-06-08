@@ -27,4 +27,4 @@ https://campfinderjp.com/
 
 - コメント機能、検索機能も実装しています。
 
-<img src="S__91955207.jpg" width="320">
+<img src="S__91955207.jpg" width="320">　　　　<img src="S__91955209.jpg" width="320">
