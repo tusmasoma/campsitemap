@@ -153,7 +153,7 @@ class ControlMap {
                             marker.setVisible(false);
                         }
                     }else if (marker.category === 'spa'){
-                        if (map.getZoom() >= i%10+7 || map.getZoom() >= 10) {
+                        if (map.getZoom() >= i%15+6 || map.getZoom() >= 10) {
                             marker.setVisible(true);
                         } else {
                             marker.setVisible(false);
@@ -255,24 +255,8 @@ class ControlMap {
 }
 
 
-function initMap2() {
+function mapApp() {
     const allSpot = document.querySelector('#allspot');
-    /** 
-    //google.maps.Mapオブジェクトを初期化し、特定のhtml要素内にGoogleMapを表示します
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: { lat: 43.5882, lng: 142.467 },
-      zoom: 6,
-      maxZoom: 18,
-      minZoom: 4,
-      gestureHandling: "greedy",
-      //mapTypeControl: false, // マップタイプコントロールを非表示にする
-      styles: [
-        {
-          featureType: 'poi',
-          stylers: [{visibility: 'off'}]
-        }
-      ]
-    });*/
 
     let controlMap = new ControlMap(map);
     controlMap.control();
@@ -281,7 +265,6 @@ function initMap2() {
     let savedMapState = localStorage.getItem("mapState");
     let savedNotHistoryBack = localStorage.getItem("notHistoryBack");
     if (savedMapState && savedNotHistoryBack === "true") {
-        console.log('hey')
         savedMapState = JSON.parse(savedMapState);
          // Markerの復元
         const markerData = JSON.parse(savedMapState.marker);  //JSON形式のデータをobjectに変換
@@ -339,14 +322,16 @@ function initMap2() {
     })
 
     allSpot.addEventListener('click',function(){
-        controlMap.removeMarkers()
-        controlMap.control()
+        toggleBackgroundColor(allSpot);
+        controlMap.removeMarkers();
+        controlMap.control();
     })
 
     for(let i = 0; i < controlMap.category.length; i++){
         let Squeeze = document.querySelector(`#${controlMap.category[i]}Squeeze`);
         Squeeze.addEventListener('click',function() {
-            controlMap.removeMarkers()
+            toggleBackgroundColor(Squeeze);
+            controlMap.removeMarkers();
             if (controlMap.currentInfoWindow) { // 既に開いている情報ウィンドウがある場合は閉じる
                 controlMap.currentInfoWindow.close();
                 controlMap.currentInfoWindow = null
@@ -380,5 +365,23 @@ function initMap() {
       ]
     });
 
-    google.maps.event.addListenerOnce(map, 'idle', initMap2)
+    google.maps.event.addListenerOnce(map, 'idle', mapApp)
+}
+
+
+function toggleBackgroundColor(itemElement) {
+    const elements = document.querySelectorAll(".item");
+
+    elements.forEach((element) => {
+        if (element.style.backgroundColor === "rgb(221, 221, 221)") {
+            element.style.removeProperty("background-color");
+        }
+    });
+    if (itemElement.style.backgroundColor === "rgb(221, 221, 221)") {
+        // background-colorが既に設定されている場合、削除する
+        itemElement.style.removeProperty("background-color");
+    } else {
+        // background-colorが設定されていない場合、付与する
+        itemElement.style.backgroundColor = "#DDDDDD";
+    }
 }
