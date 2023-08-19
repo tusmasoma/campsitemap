@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
+from rest_framework import viewsets,generics
 from django.urls import reverse
 from .models import Spot,Comment,SpotImageUrl
+from .serializers import SpotSerializer
 from .decoraters import superuser_restriction,is_authenticated_restriction
 from django.contrib.auth.models import User
 from django.core.files import File
@@ -12,6 +14,20 @@ import environ
 
 env = environ.Env()
 env.read_env(os.path.join(settings.BASE_DIR, '.env'))
+
+
+#CampsiteViewSetで取得したCampsiteモデルのデータ(queryset)は、CampsiteSerializerクラスによってシリアル化されてレスポンスされます。
+class CampsiteViewSet(viewsets.ModelViewSet):
+    queryset = Spot.objects.filter(category = 'campsite')
+    serializer_class = SpotSerializer
+
+class SpaViewSet(viewsets.ModelViewSet):
+    queryset = Spot.objects.filter(category = 'spa')
+    serializer_class = SpotSerializer
+
+class ConvenienceStoreViewSet(viewsets.ModelViewSet):
+    queryset = Spot.objects.filter(category = 'conveniencestore')
+    serializer_class = SpotSerializer
 
 
 @superuser_restriction
