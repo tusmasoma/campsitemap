@@ -61,35 +61,34 @@ webサーバーとしてNginxを選んだ理由は二つあります。
 - localStrageにスポットの情報を一定時間保存することで、サーバーとの無駄な非同期処理を減らすようにしました。
 
 ```
-control() {
-        //this.getCurrentLocation() //現在地表示
-
-        //ローカルストレージに "results" が保存されている場合にはその値を使ってマーカーをセットし、そうでない場合には非同期処理を開始するようになっています。
-        //これにより無駄な非同期処理を減らします。
-        //一定時間以上経過している場合には再度非同期処理を行う
+    control() {
+        /** 
+        * 1日以内に非同期処理が行われている場合、ローカルストレージに保存された結果を使用する。
+        * それ以外の場合、非同期処理を行う。
+        */
         const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000; // 1日のミリ秒数
-        let lastProcessTime = localStorage.getItem("lastProcessTime");
+        const lastProcessTime = localStorage.getItem("lastProcessTime");
         if (lastProcessTime && Date.now() - lastProcessTime < ONE_DAY_IN_MS) {
-            // 1日以内に処理が行われているため、保存された結果を使用する
-            for(let i = 0;i < this.category.length;i++){
-                let savedResult = localStorage.getItem(`${this.category[i]}Result`);
-                if (savedResult) {
-                    savedResult = JSON.parse(savedResult);
-                    this.setMarker(savedResult); 
-                    console.log("localstorage")
-                } else {
-                    // データが保存されていない場合は再度非同期処理を行う
-                    this.spotAsynchronousprocessing(`api/${this.category[i]}/?format=json`,this.category[i])
-                    console.log("not localstorage")
-                }
-            }
+            this._useStoredDataOrFetch();
         } else {
-            // 前回の処理から1日以上経過している場合は再度非同期処理を行う
-            this.asynchronousprocessing();
-            // 現在時刻を保存する
-            localStorage.setItem("lastProcessTime", Date.now());
+            this._fetchDataAndUpdateTime();
         }
     }
+    _useStoredDataOrFetch() {
+        for (let category of this.category) {
+            const savedResult = localStorage.getItem(`${category}Result`);
+            if (savedResult) {
+                this.setMarker(JSON.parse(savedResult));
+            } else {
+                this._fetchSingleCategoryData(`api/${category}/?format=json`, category)
+            }
+        }
+    }
+    _fetchDataAndUpdateTime() {
+        this._fetchAllCategoryData();
+        localStorage.setItem("lastProcessTime", Date.now());
+    }
+
 ```
 
 
