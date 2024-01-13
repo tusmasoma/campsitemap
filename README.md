@@ -16,19 +16,19 @@ https://campfinderjp.com/
 ## サイトの使い方
 - デフォルトでいくつかのキャンプ場が表示されており、zoomすることにより表示される数が増えます。また、サイドバーから表示するスポットを絞り込めます。
 
-<img src="S__91955202.jpg" width="320">　<img src="S__91955204.jpg" width="320">　<img src="S__91955208.jpg" width="320">
+<img src="docker/back/django_project/static/img/S__91955202.jpg" width="320">　<img src="docker/back/django_project/static/img/S__91955204.jpg" width="320">　<img src="docker/back/django_project/static/img/S__91955208.jpg" width="320">
 
 <br>
 
 - スポットのiconをクリックすることで、情報ウィンドウが出現し、もう一度クリックすると詳細画面に飛びます
  
-<img src="S__91955205.jpg" width="320">　　　　<img src="S__91955206.jpg" width="320">
+<img src="docker/back/django_project/static/img/S__91955205.jpg" width="320">　　　　<img src="docker/back/django_project/static/img/S__91955206.jpg" width="320">
 
 <br>
 
 - コメント機能、検索機能も実装しています。
 
-<img src="S__91955207.jpg" width="320">　　　　<img src="S__91955209.jpg" width="320">
+<img src="docker/back/django_project/static/img/S__91955207.jpg" width="320">　　　　<img src="docker/back/django_project/static/img/S__91955209.jpg" width="320">
 
 ## 制作環境（サーバー環境や使用ツール）と使用言語
 - フロントエンド言語 (HTML,CSS,JavaScript)
