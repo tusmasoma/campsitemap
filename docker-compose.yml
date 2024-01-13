@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  db:
+    container_name: campfinder_db
+    build: 
+      context: ./
+      dockerfile: ./docker/db/Dockerfile
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+    volumes:
+      - ./docker/db/data:/var/lib/postgresql/data
+  
+  back:
+    container_name: campfinder_back
+    build: 
+      context: ./
+      dockerfile: ./docker/back/Dockerfile
+    working_dir: "/app/docker/back/django_project"
+    command: >
+      bash -c "
+        echo db:5432:db:user:password > ~/.pgpass &&
+        chmod 600 ~/.pgpass
+       service rsyslog start
+       sh ../start.sh db
+      "
+    tty: true
+    cap_add: 
+      - SYSLOG
+    volumes:
+      - ./docker/back:/app/docker/back/
+    expose:
+      - 9001
+    ports:
+      - "8083:8083"
+    depends_on:
+      - db
+  
+  nginx:
+    container_name: campfinder_nginx
+    build: 
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - back

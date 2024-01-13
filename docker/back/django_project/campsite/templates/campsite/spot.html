@@ -1,0 +1,248 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:locale" content="ja_JP">
+    <!--SEO-->
+    <title>{{obj.name}} | CampFinder</title>
+    <meta name="description" content="{{obj.description|truncatechars:150}}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:url" content="{% url 'campsite:spot-detail' obj.id%}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{obj.name}} | CampFinder"/>
+    <meta property="og:description" content="{{obj.description|truncatechars:150}}"/>
+    <meta property="og:site_name" content="CampFinder" />
+    <meta property="og:image" content="{% static 'img/favicon.PNG'%}" />
+    <!-- TwitterCard-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{obj.name}} | CampFinder" />
+    <meta name="twitter:description" content="{{obj.description|truncatechars:150}}" />
+    <meta name="twitter:image" content="{% static 'img/favicon.PNG'%}" />
+    <meta name="twitter:domain" content="https://campfinderjp.com/">
+    <!-- FontAwesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/solid.min.css">
+    <!-- GoogleFonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Russo One-->
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&amp;display=swap" rel="stylesheet">
+    <!-- Noto Sans JP-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet">
+    <!-- cssファイル-->
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <!--icon-->
+    <link rel="icon" href="{% static 'img/favicon.PNG'%}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon.PNG'%}">
+  </head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8C25C47LR"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-P8C25C47LR');
+  </script>
+  <body class="page-wrapper">
+    <header class="main-header">
+      <div class="container">
+        <button class="gnavTrigger" type="button" aria-label="メニューを開閉する" aria-expanded="false" aria-controls="gNav"><i class="fa-solid fa-bars"></i></button>
+        <h1 class="heading main-heading -brand"><a class="mapBack" href="#">CampFinder</a></h1>
+        <button class="searchOpener" type="button" aria-label="検索フォームを開く" aria-hidden="false"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <form class="searchForm search-form" action="" method="" aria-hidden="true">
+          <label class="label"><i class="icon fa-solid fa-magnifying-glass" aria-hidden="false"></i>
+            <input class="input main-input -noborder" type="search" name="">
+          </label>
+        </form>
+        <button class="searchCloser" type="button" aria-label="検索フォームを閉じる" aria-hidden="true"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <nav class="gNav" id="gNav" aria-hidden="true">
+        <ul class="prefixed-linkList -primary -accent">
+          <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-user"></i>
+              <p class="title">Account</p></a></li>
+          <li class="item"><a class="link" href="#"><i class="icon -center fa-solid fa-gear"></i>
+              <p class="title">Settings</p></a></li>
+          <li class="item"><a class="link mapBack" href="#"><i class="icon -center fa-solid fa-map"></i>
+              <p class="title">map</p></a></li>
+          {% if request.user.is_authenticated %}
+          <li class="item"><a class="link" href="{%url 'accounts:logout'%}"><i class="icon -center fas fa-sign-out"></i>
+              <p class="title">Logout</p></a></li>
+          {%else%}
+          <li class="item"><a class="link" href="{%url 'accounts:login'%}?next={{ request.path }}"><i class="icon -center fas fa-sign-in"></i>
+              <p class="title">Login</p></a></li>
+          {%endif%}
+          {%if is_superuser%}
+          <li class="item"><a class="link" href="{%url 'campsite:spot-delete' obj.id %}"><i class="icon -center fas fa-trash-alt"></i>
+              <p class="title">DELETE</p></a></li>
+          {%endif%}
+        </ul>
+      </nav>
+      <ul class="searchResult prefixed-linkList -primary -accent" aria-hidden="true">
+        <!--
+        <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-tent"></i>
+            <p class="title">見出し1</p></a></li>
+        <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-person-hiking"></i>
+            <p class="title">見出し2</p></a></li>
+        <li class="item"><a class="link" href=""><i class="icon -center fa-solid fa-anchor"></i>
+            <p class="title">見出し3</p></a></li>-->
+      </ul>
+    </header>
+    <main class="main-spot">
+      <div class="container">
+        <div class="sliderGroup slider-group">
+          <ul class="slider">
+            {%if imageurlObj_list%}
+            {%for imageurlObj in imageurlObj_list%}
+            <li><img src="{{imageurlObj.url}}" alt="投稿された画像" width="500" height="375" decoding="async"></li>
+            {%endfor%}
+            {%endif%}
+            {%if not imageurlObj_list%}
+            <li><img src="https://thumb.ac-illust.com/39/3920178d66157451930de97cc5431a64_t.jpeg" alt="投稿された画像" width="500" height="375" decoding="async"></li>
+            {%endif%}
+          </ul>
+          <ul class="dots"></ul>
+        </div>
+        <h2 class="spotName main-heading -lv1">{{obj.name}}</h2>
+        <div class="tabMenu tab-menu -primary" role="tabList" aria-label="タブメニュー">
+          <button class="detail tab" role="tab" aria-label="詳細を開閉する" aria-selected="true" aria-expanded="true" aria-controls="detail"><span class="title">Description</span></button>
+          <button class="comment tab" role="tab" aria-label="コメントを開閉する" aria-selected="false" aria-expanded="false" aria-controls="comment"><span class="title">Comment</span></button>
+        </div>
+        <section class="detail detail-group" id="detail" role="tabPanel" aria-hidden="false">
+          <div class="descWrapper">
+            <p class="desc main-text">{{obj.description|linebreaksbr}}</p>
+            <p class="desc main-text"></p>
+          </div>
+          <ul class="infoList prefixed-list -secondary">
+            <li class="item"> <i class="icon fa-solid fa-location-dot" aria-label="住所"></i>
+              <p class="title">{{obj.address}}</p>
+            </li>
+            <li class="item"> <i class="icon fa-solid fa-phone" aria-label="TEL"></i>
+              <p class="title">{{obj.phone}}</p>
+            </li>
+            {%if obj.period %}
+            <li class="item"> <i class="icon fa-solid fa-clock" aria-label="営業時間"></i>
+              <p class="title">
+                {{obj.period|linebreaksbr}}
+              </p>
+            </li>
+            {%endif%}
+            {%if obj.price %}
+            <li class="item"> <i class="icon -small fa-solid fa-yen-sign" aria-label="値段"></i>
+              <p class="title">
+                {{obj.price|linebreaksbr}}
+              </p>
+            </li>
+            {%endif%}
+            <li class="item"><p class="title" style="text-align: center;">&copy;2023,soma_kimura</p></li>
+          </ul>
+        </section>
+        <section class="comment comment-group" id="comment" role="tabPanel" aria-hidden="true">
+          {% if request.user.is_authenticated %}
+          <button class="addTrigger action-button" type="button" aria-label="コメント投稿画面を開く" aria-expanded="false" aria-controls="add-comment">コメントする</button>
+          {%else%}
+          <p style="text-align: center;margin-bottom: 1rem;color: #d3d2d2;"><a href="{%url 'accounts:login'%}?next={{ request.path }}" style="color: #8eb181;">ログイン</a>するとコメントできます</p>
+          <button class="addTrigger action-button" type="button" aria-label="コメント投稿画面を開く" aria-expanded="false" aria-controls="add-comment" disabled>コメントする</button>
+          {%endif%}
+          <ul class="comment-list"> 
+            {%for commentObj in commentobj_list%}
+            <li class="item">
+              <div class="head">
+                <div class="left"><img class="icon" width="16" height="16" src="{% static 'img/sample-face-1.jpg'%}" alt="アイコン">
+                  <p class="name">{{commentObj.user.username}}</p>
+                </div>
+                <div class="right">
+                  <time class="time" date-time="{{commentObj.created}}">{{commentObj.created | date:"Y-m-j"}}</time>
+                  <button class="trigger" type="button" aria-label="コメント操作リストを開閉する" aria-expanded="false" aria-controls="board"><i class="fa-solid fa-ellipsis"></i></button>
+                  <ul class="board" id="board" aria-hidden="true">
+                    <li class="item"> <a class="link" href="">このコメントを報告</a></li>
+                    {%if request.user == commentObj.user or is_superuser%}
+                    <li class="item"> <a class="link" href="{%url 'campsite:delete-comment' commentObj.id%}?next={{ request.path }}">削除</a></li>
+                    {%endif%}
+                  </ul>
+                </div>
+              </div>
+              <div class="rating rating-display" data-rating="{{commentObj.starRate}}" aria-label=""><i class="item fa-solid fa-star"></i><i class="item fa-solid fa-star"></i><i class="item fa-solid fa-star"></i><i class="item fa-solid fa-star"></i><i class="item fa-solid fa-star"></i></div>
+              <div class="body">
+                <p class="text">{{commentObj.text}}</p>
+              </div>
+            </li>
+            {%endfor%}
+          </ul>
+        </section>
+      </div>
+      <div class="addComment-mask" aria-hidden="true"></div>
+      <section class="addComment add-comment" id="add-comment" aria-hidden="true">
+        <button class="close" type="button"><i class="fa-solid fa-xmark"> </i></button>
+        <div class="container"> 
+          <div class="head"> 
+            <p class="spotName">{{obj.name}}</p>
+          </div>
+          <form class="form" action="{%url 'campsite:add-comment'%}" method="POST">{% csrf_token %} 
+            <div class="content">
+              <div class="head"> <img class="icon" width="16" height="16" src="{% static 'img/sample-face-1.jpg'%}" alt="アイコン">
+                <p class="name">{{request.user}}</p>
+              </div>
+              <div class="rating rating-select" data-rating="" aria-label="">
+                <button class="radio" type="button" data-rate="1"><i class="icon fa-solid fa-star"></i></button>
+                <button class="radio" type="button" data-rate="2"><i class="icon fa-solid fa-star"></i></button>
+                <button class="radio" type="button" data-rate="3"><i class="icon fa-solid fa-star"></i></button>
+                <button class="radio" type="button" data-rate="4"><i class="icon fa-solid fa-star"></i></button>
+                <button class="radio" type="button" data-rate="5"><i class="icon fa-solid fa-star"></i></button>
+              </div>
+              <input type="hidden" name="spotkey" value="{{obj.key}}">
+              <input class="ratingInput" type="hidden" name="rate" value="" required> <!--commentのrateはここ-->
+              <textarea class="textInput main-input" name="text" rows="3" placeholder="コメントを入力してください。" required></textarea> <!--coment本体-->
+            </div>
+            <button class="submit action-button" type="submit" disabled>投稿</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <div class="content-mask" aria-hidden="true"></div>
+    <script src="{% static 'js/DisplaySwitcher.js'%}"></script>
+    <script src="{% static 'js/DisplayTriggerSwitcher.js'%}"></script>
+    <script src="{% static 'js/DisplaySwitcherBySingleTrigger.js'%}"></script>
+    <script src="{% static 'js/main-header.js'%}"></script>
+    <script src="{% static 'js/Slider.js'%}"></script>
+    <script src="{% static 'js/slider-group.js'%}"></script>
+    <script src="{% static 'js/TabMenu.js'%}"></script>
+    <script src="{% static 'js/main-spot.js'%}"></script>
+    <script src="{% static 'js/DisplaySwitcherByDoubleTrigger.js'%}"></script>
+    <script src="{% static 'js/main-comment.js'%}"></script>
+    <script src="{% static 'js/rating-display.js'%}"></script>
+    <script src="{% static 'js/add-comment.js'%}"></script>
+    <script>
+        const mapBacks = document.querySelectorAll('.mapBack');
+        mapBacks.forEach(mapBack => {
+          mapBack.addEventListener('click', function(event) {
+            event.preventDefault();
+            // クリックされたときの処理
+            if (history.pushState && history.state !== undefined) {
+              // 1つ前のページのURLを取得する
+              if(document.referrer.includes("/login/")){
+                notHistoryBack()
+              } else if (document.referrer.includes("/signup/")){
+                notHistoryBack()
+              } else{
+                // ブラウザバックできる場合の処理
+                localStorage.setItem("notHistoryBack","false");
+                window.history.back(-1);
+              }
+            } else {
+              notHistoryBack()
+            }
+          });
+        });
+
+        function notHistoryBack(){
+          // ブラウザバックできない場合の処理
+          localStorage.setItem("notHistoryBack","true");
+          window.location.href = '/'
+        }
+    </script>
+  </body>
+</html>

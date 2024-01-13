@@ -1,0 +1,50 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!--SEO-->
+		<title>私たちについて - CampFinder</title>
+		<!--icon-->
+		<link rel="icon" href="{% static 'img/favicon.PNG'%}">
+		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon.PNG'%}">
+		<style>
+                    .AboutusTitle {
+			    display: flex;
+			    flex-direction: column;
+			    font-size: 1.6rem;
+		    }
+		    @media screen and (min-width:768px) {
+			    .AboutusTitle {
+				    flex-direction: row;
+				    text-align: center;
+				    width: 510px;
+				    margin: 0 auto;
+			    }
+		    }
+		</style>
+	</head>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-P8C25C47LR"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	
+	gtag('config', 'G-P8C25C47LR');
+	</script>
+	<body>
+		<main style="text-align: center; line-height: 2.5;margin: 0 auto;margin-top: 3rem; ">
+			<div class="AboutusTitle">
+				<div>Produce &amp; Programming:</div>
+				<div>Souma Kimura</div>
+			</div>
+			<p>Email:ksouma170@gmail.com</p>
+			<p>Instagram:souma2564</p>
+			<p>Niigata Japan</p>
+			<a href="{%url 'campsite:index'%}">back</a>
+		</main>
+	</body>
+</html>

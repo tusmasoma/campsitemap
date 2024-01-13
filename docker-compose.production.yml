@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  back:
+    container_name: prescription_back
+    build:
+      context: ./
+      dockerfile: ./docker/back/Dockerfile
+    working_dir: "/app/docker/back/django_project"
+    tty: true
+    cap_add:
+      - SYSLOG
+    command: bash -c "service rsyslog start && gunicorn --workers=3 config.wsgi:application --timeout 240 --bind 0.0.0.0:8083"
+    volumes:
+      - ./docker/back:/app/docker/back/
+    expose:
+      - 9001
+    ports:
+      - "8083:8083"
+    ulimits:
+      core:
+        soft: 0
+        hard: 0
+
+  nginx:
+    container_name: campfinder_nginx
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    #depends_on:
+    #  - back
