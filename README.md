@@ -4,8 +4,7 @@
 
 https://campfinderjp.com/
 
-![campfinderQR](QR_194973.png)
-
+![campfinderQR](docker/back/django_project/static/img/QR_194973.png)
 ## 開発動機
 北海道をその日任せで自転車旅行している時に、最寄りのキャンプ場・温泉・コンビニの情報を求めたのですが、検索が煩雑な上に情報の内容も鮮度も劣り、苦労しました。自転車仲間も同じ不便さを嘆いていたことから、これを解決できるサイトを作ろうと思いました。
 
