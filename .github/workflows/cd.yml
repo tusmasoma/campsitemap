@@ -38,10 +38,21 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-    - name: Send deploy command via SSM
+    #- name: Send deploy command via SSM
+    #  run: |
+    #    aws ssm send-command \
+    #      --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+    #      --document-name "AWS-RunShellScript" \
+    #      --parameters commands=["sudo su - ec2-user","cd campsitemap","git pull origin main","sudo docker compose logs back"] \
+    #      --comment "Deploying the latest version from GitHub Actions"
+    
+    - name: Deploy to EC2 instance
       run: |
-        aws ssm send-command \
-          --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
-          --document-name "AWS-RunShellScript" \
-          --parameters commands=["sudo su - ec2-user","cd campsitemap","git pull origin main","sudo docker compose logs back"] \
-          --comment "Deploying the latest version from GitHub Actions"
+        command_id=$(aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=[
+          "cd campsitemap",
+          "git pull origin main",
+          "sudo docker compose logs back"
+        ]' --query "Command.CommandId" --output text)
+        aws ssm wait command-executed --instance-id ${{ secrets.EC2_INSTANCE_ID }} --command-id $command_id
+        output=$(aws ssm get-command-invocation --command-id $command_id --instance-id ${{ secrets.EC2_INSTANCE_ID }} --query "StandardOutputContent" --output text)
+        echo "$output"
