@@ -32,12 +32,12 @@ jobs:
     if: ${{ needs.check-migrations.outputs.needs-migration == '0' }}
     runs-on: ubuntu-latest
     steps:
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+    #- name: Configure AWS credentials
+    #  uses: aws-actions/configure-aws-credentials@v1
+    #  with:
+    #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #    aws-region: ${{ secrets.AWS_REGION }}
     #- name: Send deploy command via SSM
     #  run: |
     #    aws ssm send-command \
@@ -45,14 +45,32 @@ jobs:
     #      --document-name "AWS-RunShellScript" \
     #      --parameters commands=["sudo su - ec2-user","cd campsitemap","git pull origin main","sudo docker compose logs back"] \
     #      --comment "Deploying the latest version from GitHub Actions"
-    
-    - name: Deploy to EC2 instance
+    #- name: Deploy to EC2 instance
+    #  run: |
+    #    command_id=$(aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=[
+    #      "sudo su - ec2-user",
+    #      "ls",
+    #      "cd campsitemap",
+    #      "ls",
+    #    ]' --query "Command.CommandId" --output text)
+    #    aws ssm wait command-executed --instance-id ${{ secrets.EC2_INSTANCE_ID }} --command-id $command_id
+    #    output=$(aws ssm get-command-invocation --command-id $command_id --instance-id ${{ secrets.EC2_INSTANCE_ID }} --query "StandardOutputContent" --output text)
+    #    echo "$output"
+        
+    - name: Configure AWS credentials
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set default.region ${{ secrets.AWS_REGION }}
+
+    - name: Execute commands on EC2 instance
       run: |
         command_id=$(aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=[
           "sudo su - ec2-user",
           "ls",
+          "echo ---------------------------------------------------"
           "cd campsitemap",
-          "ls",
+          "ls"
         ]' --query "Command.CommandId" --output text)
         aws ssm wait command-executed --instance-id ${{ secrets.EC2_INSTANCE_ID }} --command-id $command_id
         output=$(aws ssm get-command-invocation --command-id $command_id --instance-id ${{ secrets.EC2_INSTANCE_ID }} --query "StandardOutputContent" --output text)
