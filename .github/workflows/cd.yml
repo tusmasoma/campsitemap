@@ -43,5 +43,5 @@ jobs:
         aws ssm send-command \
           --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
           --document-name "AWS-RunShellScript" \
-          --parameters commands=["sudo su - ec2-user","cd campsitemap","git pull origin main"] \
+          --parameters commands=["sudo su - ec2-user","cd campsitemap","git pull origin main", "sudo docker compose logs back"] \
           --comment "Deploying the latest version from GitHub Actions"
