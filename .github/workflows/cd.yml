@@ -12,6 +12,7 @@ jobs:
     # setupするsteps書く
     - name: Check for migrations
       id: check-migrations
+      working-directory: ./docker/back/django_project/
       run: |
         python manage.py makemigrations --dry-run --check
         echo "needs-migration=$?" >> $GITHUB_ENV
