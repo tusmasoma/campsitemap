@@ -11,12 +11,17 @@ jobs:
      runs-on: ubuntu-latest
      steps:
      - uses: actions/checkout@v3
+     - name: Setup .env file
+       working-directory: ./docker/back/django_project
+       run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
+       
      - name: Build and start the services
        run: |
          docker compose build
          docker compose up -d
          sleep 15s
          docker ps -a
+         
      - name: Run Django tests
        run: |
          docker compose exec back python manage.py test -r
