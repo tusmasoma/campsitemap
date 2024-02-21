@@ -18,12 +18,9 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
     apt-get install -y software-properties-common locales vim unzip libpq-dev libssl-dev libffi-dev python3-dev libcurl4-openssl-dev build-essential libgl1-mesa-dev postgresql rsyslog curl poppler-utils && \
     locale-gen $LANG && \
-    add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get update && \
     apt-get install -y python3.9 python3.9-dev python3.9-distutils libtesseract-dev git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 
 # Python and PIP Install
 # setuptools, Cythonを予め入れておかないとreqirements.txtのインストールでエラーが出る
