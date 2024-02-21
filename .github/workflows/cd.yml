@@ -1,1 +1,37 @@
+name: Django CD with Migration Check
 
+on: [push]
+
+jobs:
+  check-migrations:
+    runs-on: ubuntu-latest
+    outputs:
+      needs-migration: ${{ steps.check-migrations.outputs.needs-migration }}
+    steps:
+    - uses: actions/checkout@v2
+    # setupするsteps書く
+    - name: Check for migrations
+      id: check-migrations
+      run: |
+        python manage.py makemigrations --dry-run --check
+        echo "needs-migration=$?" >> $GITHUB_ENV
+      continue-on-error: true
+
+  deploy:
+    needs: check-migrations
+    if: ${{ needs.check-migrations.outputs.needs-migration == '0' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    - name: Send deploy command via SSM
+      run: |
+        aws ssm send-command \
+          --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+          --document-name "AWS-RunShellScript" \
+          --parameters commands=["sudo su - ec2-user","cd prescription","git pull origin main","git lfs pull","dc exec back bash","pkill gunicorn -HUP"] \
+          --comment "Deploying the latest version from GitHub Actions"
