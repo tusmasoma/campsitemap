@@ -140,3 +140,10 @@ dmypy.json
 # Docker
 docker/db/data/
 
+# django
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+docker/back/django_project/db.sqlite3
+temporary
+
