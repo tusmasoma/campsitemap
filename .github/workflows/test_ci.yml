@@ -37,7 +37,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-      working-directory: ./docker/back/django_project
+      working-directory: ./docker/back
 
     - name: Run tests
       env:
