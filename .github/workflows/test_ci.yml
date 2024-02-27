@@ -28,6 +28,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Setup .env file
+      working-directory: ./docker/back/django_project
+      run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
