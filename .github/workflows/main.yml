@@ -25,3 +25,7 @@ jobs:
      - name: Run Django tests
        run: |
          docker compose exec back python manage.py test -r
+         
+     - name: Cleanup
+       if: always()
+       run: docker compose down -v
