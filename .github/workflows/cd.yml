@@ -22,8 +22,9 @@ jobs:
      - name: Check for migrations
        id: check-migrations
        run: |
-         docker compose exec back python manage.py makemigrations --dry-run --check
-         echo "needs-migration=$?" >> $GITHUB_OUTPUT
+         docker compose exec back sh -c "python manage.py makemigrations --dry-run --check; echo \$? > /tmp/exit_status"
+         exit_status=$(docker compose exec back cat /tmp/exit_status)
+         echo "needs-migration=${exit_status}" >> $GITHUB_OUTPUT
        continue-on-error: true
 
   deploy:
