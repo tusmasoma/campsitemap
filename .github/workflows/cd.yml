@@ -21,6 +21,8 @@ jobs:
            models_changed='true'
            migrations_changed='true'
          else
+           git fetch origin ${{ github.event.before }}
+           git fetch origin ${{ github.sha }}
            models_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'models.py' && echo 'true' || echo 'false')
            migrations_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'migrations/' && echo 'true' || echo 'false')
          fi
