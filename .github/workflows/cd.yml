@@ -18,6 +18,8 @@ jobs:
          migrations_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'migrations/' && echo 'true' || echo 'false')
          echo "models_changed=${models_changed}" >> $GITHUB_OUTPUT
          echo "migrations_changed=${migrations_changed}" >> $GITHUB_OUTPUT
+         echo "models_changed=${models_changed}"
+         echo "migrations_changed=${migrations_changed}"
 
   deploy:
     needs: check-migrations
