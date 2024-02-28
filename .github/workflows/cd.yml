@@ -27,6 +27,10 @@ jobs:
          echo "needs-migration=${exit_status}" >> $GITHUB_OUTPUT
        continue-on-error: true
 
+     - name: Cleanup
+       if: always()
+       run: docker compose down -v
+
   deploy:
     needs: check-migrations
     if: ${{ needs.check-migrations.outputs.needs-migration == '0' }}
