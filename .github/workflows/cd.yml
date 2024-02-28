@@ -6,34 +6,22 @@ jobs:
   check-migrations:
     runs-on: ubuntu-latest
     outputs:
-      needs-migration: ${{ steps.check-migrations.outputs.needs-migration }}
+      models_changed: ${{ steps.check-migrations.outputs.models_changed }}
+      migrations_changed: ${{ steps.check-migrations.outputs.migrations_changed }}
     steps:
      - uses: actions/checkout@v3
-     - name: Setup .env file
-       working-directory: ./docker/back/django_project
-       run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
        
-     - name: Build and start the services
-       run: |
-         docker compose build
-         docker compose up -d
-         sleep 15s
-
-     - name: Check for migrations
+     - name: Check for changes in models.py and migrations
        id: check-migrations
        run: |
-         docker compose exec back sh -c "python manage.py makemigrations --dry-run --check; echo \$? > /tmp/exit_status"
-         exit_status=$(docker compose exec back cat /tmp/exit_status)
-         echo "needs-migration=${exit_status}" >> $GITHUB_OUTPUT
-       continue-on-error: true
-
-     - name: Cleanup
-       if: always()
-       run: docker compose down -v
+         models_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'models.py' && echo 'true' || echo 'false')
+         migrations_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'migrations/' && echo 'true' || echo 'false')
+         echo "models_changed=${models_changed}" >> $GITHUB_OUTPUT
+         echo "migrations_changed=${migrations_changed}" >> $GITHUB_OUTPUT
 
   deploy:
     needs: check-migrations
-    if: ${{ needs.check-migrations.outputs.needs-migration == '0' }}
+    if: ${{ needs.check-migrations.outputs.models_changed == 'false' && needs.check-migrations.outputs.migrations_changed == 'false' }}
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS credentials
