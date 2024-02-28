@@ -14,10 +14,17 @@ jobs:
      - name: Check for changes in models.py and migrations
        id: check-migrations
        run: |
-         models_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'models.py' && echo 'true' || echo 'false')
-         migrations_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'migrations/' && echo 'true' || echo 'false')
+         if [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+           echo "No previous commit to compare."
+           models_changed='true'
+           migrations_changed='true'
+         else
+           models_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'models.py' && echo 'true' || echo 'false')
+           migrations_changed=$(git diff --name-only ${{ github.sha }} ${{ github.event.before }} | grep -q 'migrations/' && echo 'true' || echo 'false')
+         fi
          echo "models_changed=${models_changed}" >> $GITHUB_OUTPUT
          echo "migrations_changed=${migrations_changed}" >> $GITHUB_OUTPUT
+
          echo "models_changed=${models_changed}"
          echo "migrations_changed=${migrations_changed}"
 
