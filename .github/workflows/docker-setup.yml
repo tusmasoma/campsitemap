@@ -56,9 +56,9 @@ jobs:
        run: |
          docker images
          
-         docker tag campfinder-db:latest $ECR_REGISTRY/$ECR_REPOSITORY_DB:latest
-         docker tag campfinder-back:latest $ECR_REGISTRY/$ECR_REPOSITORY_BACK:latest
-         docker tag campfinder-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY_NGINX:latest
+         docker tag campsitemap-db:latest $ECR_REGISTRY/$ECR_REPOSITORY_DB:latest
+         docker tag campsitemap-back:latest $ECR_REGISTRY/$ECR_REPOSITORY_BACK:latest
+         docker tag campsitemap-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY_NGINX:latest
 
          docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB:latest
          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK:latest
