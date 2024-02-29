@@ -8,6 +8,12 @@ on:
         required: true
 
 
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY_NGINX: campfinder_nginx
+  ECR_REPOSITORY_BACK: campfinder_back
+  ECR_REGISTRY: public.ecr.aws/x4o0n4b7
+
 jobs:
   build:
      runs-on: ubuntu-latest
@@ -30,3 +36,28 @@ jobs:
            fi
            sleep 1
          done
+         
+     - name: Configure AWS credentials
+       run: |
+         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws configure set default.region ${{ env.AWS_REGION }}
+         
+     - name: Login to Amazon ECR
+       id: login-ecr
+       run: |
+         aws ecr-public get-login-password --region $AWS_REGION |
+         docker login --username AWS --password-stdin $ECR_REGISTRY
+         
+     - name: Push images to Amazon ECR
+       run: |
+         docker tag campfinder-db:latest $ECR_REGISTRY/$ECR_REPOSITORY_DB:latest
+         docker tag campfinder-back:latest $ECR_REGISTRY/$ECR_REPOSITORY_BACK:latest
+         docker tag campfinder-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY_NGINX:latest
+
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB:latest
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK:latest
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NGINX:latest
+         
+
+      
