@@ -10,7 +10,7 @@ on:
 
 
 env:
-  AWS_REGION: ap-northeast-1
+  AWS_REGION: us-west-1
   ECR_REPOSITORY_NGINX: campfinder_nginx
   ECR_REPOSITORY_BACK: campfinder_back
   ECR_REGISTRY: public.ecr.aws/x4o0n4b7
