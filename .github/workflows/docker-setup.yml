@@ -24,25 +24,26 @@ jobs:
        working-directory: ./docker/back/django_project
        run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
        
-     - name: Build and start the services
-       run: |
-         docker compose build
-         docker compose up -d
-         
-         echo "Waiting for Django server to be ready..."
-         while true; do
-           if docker compose logs back 2>&1 | grep -q "Quit the server with CONTROL-C."; then
-             echo "Django server is ready."
-             break
-           fi
-           sleep 1
-         done
+     #- name: Build and start the services
+     #  run: |
+     #    docker compose build
+     #    docker compose up -d
+     #    
+     #    echo "Waiting for Django server to be ready..."
+     #    while true; do
+     #      if docker compose logs back 2>&1 | grep -q "Quit the server with CONTROL-C."; then
+     #        echo "Django server is ready."
+     #        break
+     #      fi
+     #      sleep 1
+     #    done
          
      - name: Configure AWS credentials
        run: |
          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-         aws configure set default.region ${{ env.AWS_REGION }}
+         aws configure set default.region ${{ secrets.AWS_REGION }}
+
          
      - name: Login to Amazon ECR
        id: login-ecr
