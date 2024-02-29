@@ -6,6 +6,7 @@ on:
     secrets:
       LOCAL_ENV_FILE:
         required: true
+  workflow_dispatch:
 
 
 env:
