@@ -7,11 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
+  setup:
+    uses: ./.github/workflows/docker-setup.yml
+    secrets:
+      LOCAL_ENV_FILE: ${{ secrets.LOCAL_ENV_FILE }}
   test:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Docker
-        uses: ./.github/workflows/docker-setup.yml@main
       - name: Run Django test
         run: |
           docker compose exec back python manage.py test -r
