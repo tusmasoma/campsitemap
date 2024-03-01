@@ -64,5 +64,10 @@ jobs:
          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK:latest
          docker push $ECR_REGISTRY/$ECR_REPOSITORY_NGINX:latest
          
+     - name: Archive and upload the db volume data to S3
+       run: |
+         tar -czf db_data.tar.gz -C ./docker/db/data .
+         aws s3 cp db_data.tar.gz s3://campsitemap/db_data.tar.gz
+         
 
       
