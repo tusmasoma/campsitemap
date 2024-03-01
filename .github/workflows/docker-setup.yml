@@ -66,7 +66,7 @@ jobs:
          
      - name: Archive and upload the db volume data to S3
        run: |
-         tar -czf db_data.tar.gz -C ./docker/db/data .
+         sudo tar -czf db_data.tar.gz -C ./docker/db/data .
          aws s3 cp db_data.tar.gz s3://campsitemap/db_data.tar.gz
          
 
