@@ -23,9 +23,6 @@ jobs:
         working-directory: ./docker/back/django_project
         run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
 
-      - name: Cleanup
-        run: docker compose down -v
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
