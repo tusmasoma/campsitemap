@@ -26,6 +26,3 @@ class SpotImageUrl(models.Model):
     key = models.CharField(max_length=200)
     spot = models.ForeignKey(Spot,on_delete=models.CASCADE,related_name='spot_image_url')
     url = models.CharField(max_length=200)
-
-class TestCD(models.Model):
-    name = models.CharField(max_length=120)
