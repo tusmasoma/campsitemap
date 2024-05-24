@@ -38,10 +38,16 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Build backend image
-        run: |
-          docker buildx build --cache-from type=local,src=/tmp/.buildx-cache \
-                              --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
-                              -f docker/back/Dockerfile -t my-backend-image ./docker/back
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: my-backend-image:latest
+          load: true
+          context: ./docker/back
+          file: ./docker/back/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Save cache
         if: always()
