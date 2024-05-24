@@ -24,15 +24,16 @@ jobs:
         run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ github.ref }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ github.ref }}
+            refs/head/main
 
       - name: Build backend image
         uses: docker/build-push-action@v4
@@ -41,21 +42,22 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           tags: my-backend-image:latest
           load: true
-          context: ./docker/back
+          context: .
           file: ./docker/back/Dockerfile
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
-      - name: Save cache
-        if: always()
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache-new
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+      #- name: Save cache
+      #  if: always()
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: /tmp/.buildx-cache-new
+      #    key: ${{ runner.os }}-buildx-${{ github.sha }}
 
       - name: Build and start the services
         run: |
-          docker compose -f docker-compose.ci.yml up -d --build
+          docker compose -f docker-compose.ci.yml build
+          docker compose -f docker-compose.ci.yml up -d
           echo "Waiting for Django server to be ready..."
           while true; do
             if docker compose logs back 2>&1 | grep -q "Quit the server with CONTROL-C."; then
