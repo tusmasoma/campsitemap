@@ -3,7 +3,9 @@ version: '3'
 services:
   db:
     container_name: campfinder_db
-    image: ${ECR_REGISTRY}/campfinder_db:latest
+    build: 
+      context: ./
+      dockerfile: ./docker/db/Dockerfile
     ports:
       - "5432:5432"
     environment:
@@ -11,11 +13,14 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=db
     volumes:
-      - ./path/to/unpacked/db_data:/var/lib/postgresql/data
-
+      - ./docker/db/data:/var/lib/postgresql/data
+  
   back:
     container_name: campfinder_back
-    image: ${ECR_REGISTRY}/campfinder_back:latest
+    image: my-backend-image:latest
+    build: 
+      context: ./
+      dockerfile: ./docker/back/Dockerfile
     working_dir: "/app/docker/back/django_project"
     command: >
       bash -c "
@@ -25,7 +30,7 @@ services:
        sh ../start.sh db
       "
     tty: true
-    cap_add:
+    cap_add: 
       - SYSLOG
     volumes:
       - ./docker/back:/app/docker/back/
@@ -35,10 +40,12 @@ services:
       - "8083:8083"
     depends_on:
       - db
-
+  
   nginx:
     container_name: campfinder_nginx
-    image: ${ECR_REGISTRY}/campfinder_nginx:latest
+    build: 
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - "80:80"
     depends_on:
