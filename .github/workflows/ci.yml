@@ -41,7 +41,7 @@ jobs:
         run: |
           docker buildx build --cache-from type=local,src=/tmp/.buildx-cache \
                               --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
-                              -f ./docker/back/Dockerfile -t my-backend-image ./docker/back
+                              -f docker/back/Dockerfile -t my-backend-image ./docker/back
 
       - name: Save cache
         if: always()
