@@ -24,6 +24,7 @@ jobs:
         run: echo "${{ secrets.LOCAL_ENV_FILE }}" > .local.env
 
       - name: Set up Docker Buildx
+        id: buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
@@ -72,6 +73,6 @@ jobs:
           docker compose -f docker-compose.ci.yml run back python manage.py migrate
           docker compose -f docker-compose.ci.yml exec back python manage.py test -r
 
-      - name: Cleanup
-        if: always()
-        run: docker compose -f docker-compose.ci.yml down
+      #- name: Cleanup
+      #  if: always()
+      #  run: docker compose -f docker-compose.ci.yml down
