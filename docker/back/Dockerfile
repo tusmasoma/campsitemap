@@ -29,8 +29,8 @@ RUN echo 'alias python3="/usr/bin/python3.9"' >> ~/.bashrc && \
     pip3 install Cython==0.29.24
 
 # Copy requirements and install Python dependencies
-#COPY docker/back/requirements.txt ./requirements.txt
-COPY requirements.txt ./requirements.txt
+COPY docker/back/requirements.txt ./requirements.txt
+#COPY requirements.txt ./requirements.txt
 RUN pip3 install -r requirements.txt
 
 WORKDIR /app/django_project
