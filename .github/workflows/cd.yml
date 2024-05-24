@@ -1,6 +1,6 @@
 name: Django CD with Migration Check
 
-on: [push]
+on: []
 
 jobs:
   check-migrations:
