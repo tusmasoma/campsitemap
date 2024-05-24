@@ -58,7 +58,7 @@ jobs:
 
       - name: Build and start the services
         run: |
-          docker compose up -d --build
+          docker compose -f docker-compose.ci.yml up -d --build
           echo "Waiting for Django server to be ready..."
           while true; do
             if docker compose logs back 2>&1 | grep -q "Quit the server with CONTROL-C."; then
