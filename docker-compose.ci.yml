@@ -18,9 +18,6 @@ services:
   back:
     container_name: campfinder_back
     image: my-backend-image:latest
-    build: 
-      context: ./
-      dockerfile: ./docker/back/Dockerfile
     working_dir: "/app/docker/back/django_project"
     command: >
       bash -c "
