@@ -70,9 +70,9 @@ jobs:
 
       - name: Run Django tests
         run: |
-          docker compose run back python manage.py migrate
-          docker compose exec back python manage.py test -r
+          docker compose -f docker-compose.ci.yml run back python manage.py migrate
+          docker compose -f docker-compose.ci.yml exec back python manage.py test -r
 
       - name: Cleanup
         if: always()
-        run: docker compose down -v
+        run: docker compose -f docker-compose.ci.yml down -v
