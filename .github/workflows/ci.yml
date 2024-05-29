@@ -31,10 +31,10 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ github.ref }}
-            refs/head/main
+            ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}
+            ${{ runner.os }}-docker-
 
       - name: Build backend image
         uses: docker/build-push-action@v4
@@ -50,13 +50,13 @@ jobs:
 
       - name: Save cache
         if: always()
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache-new
-          key: ${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ github.ref }}
-            refs/heads/main
+            ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}
+            ${{ runner.os }}-docker-
 
       - name: Build and start the services
         run: |
@@ -89,13 +89,13 @@ jobs:
 
       - name: Save cache after update
         if: always()
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ github.ref }}
-            refs/heads/main
+            ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}
+            ${{ runner.os }}-docker-
 
       #- name: Cleanup
       #  if: always()
