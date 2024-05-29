@@ -73,6 +73,12 @@ jobs:
           docker compose -f docker-compose.ci.yml run back python manage.py migrate
           docker compose -f docker-compose.ci.yml exec back python manage.py test -r
 
+      - name: Debug Cache Directory
+        run: ls -al /tmp/.buildx-cache
+
+      - name: Debug New Cache Directory
+        run: ls -al /tmp/.buildx-cache-new
+
       #- name: Cleanup
       #  if: always()
       #  run: docker compose -f docker-compose.ci.yml down
