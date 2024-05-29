@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('docker/back/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}
             ${{ runner.os }}-docker-
@@ -53,7 +53,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache-new
-          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('docker/back/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}
             ${{ runner.os }}-docker-
@@ -92,7 +92,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}-${{ hashFiles('docker/back/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-docker-${{ hashFiles('docker/back/Dockerfile') }}
             ${{ runner.os }}-docker-
