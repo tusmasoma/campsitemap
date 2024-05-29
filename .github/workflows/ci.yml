@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [hoge]
+    branches: [main]
   pull_request:
-    branches: [hoge]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
