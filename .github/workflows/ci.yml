@@ -48,12 +48,15 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
-      #- name: Save cache
-      #  if: always()
-      #  uses: actions/cache@v3
-      #  with:
-      #    path: /tmp/.buildx-cache-new
-      #    key: ${{ runner.os }}-buildx-${{ github.sha }}
+      - name: Save cache
+        if: always()
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache-new
+          key: ${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            ${{ github.ref }}
+            refs/heads/main
 
       - name: Build and start the services
         run: |
@@ -83,6 +86,16 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Save cache after update
+        if: always()
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            ${{ github.ref }}
+            refs/heads/main
 
       #- name: Cleanup
       #  if: always()
