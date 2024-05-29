@@ -79,6 +79,11 @@ jobs:
       - name: Debug New Cache Directory
         run: ls -al /tmp/.buildx-cache-new
 
+      - name: Update cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
       #- name: Cleanup
       #  if: always()
       #  run: docker compose -f docker-compose.ci.yml down
